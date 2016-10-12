@@ -39,3 +39,4 @@ jspm_packages
 #Project specific stuffs
 .eslintrc.json
 config.js
+.vscode
