@@ -418,4 +418,5 @@ router.route('/battleship/:id/team/:team/name')
 	});
 
 app.use('/api', router);
+app.use('/', express.static('src/client/public'))
 app.listen(config.port);
