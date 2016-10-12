@@ -1,0 +1,11 @@
+/opt/stack/use_mongodb
+
+mongo -u root -p --authenticationDatabase admin
+use games;
+db.createUser(
+    {
+      user: "games",
+      pwd: "password",
+      roles: [ "readWrite" ]
+    }
+);
