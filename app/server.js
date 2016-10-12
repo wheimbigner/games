@@ -177,13 +177,13 @@ router.route('/users/:user')
 		User.findOne( { _id: req.params.user.toLowerCase() }, (err, user) => {
 			if (err) throw err;
 			if (!user) return res.status(404).json({success: false, message: "User not found"});
-			res.json({ success: true, user: user });
+			return res.json({ success: true, user: user });
 		});
 	})
 	.delete( requireAdmin, (req, res) => {
 		User.remove({ _id: req.params.user.toLowerCase() }, err => {
 			if (err) throw err;
-			res.json({success: true, message: "User deleted"});
+			return res.json({success: true, message: "User deleted"});
 		});
 	})
 	.patch( (req, res) => {
@@ -202,7 +202,7 @@ router.route('/users/:user')
 
 			user.save(err2 => {
 				if (err2) throw err2;
-				res.json({ success: true, message: "User modified!" });
+				return res.json({ success: true, message: "User modified!" });
 			});
 		});
 	});
