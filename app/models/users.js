@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var mongooseHidden = require('mongoose-hidden')({ defaultHidden: { password: true }});
 
 var bcrypt = require('bcrypt');
-const SALT_WORK_FACTOR = 100;
+const SALT_WORK_FACTOR = 10;
 
 var UserSchema = new Schema(
 	{
