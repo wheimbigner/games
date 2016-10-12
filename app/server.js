@@ -222,27 +222,34 @@ router.post('/battleship', requireAdmin, (req, res) => {
 	});
 });
 
-router.get('/battleship/:id', getpropgame, (req, res) => {
-	const ret = { 
-		creator: req.game.creator,
-		name: req.game.name,
-		started: req.game.started,
-		finished: req.game.finished,
-		team1: {
-			name: req.game.team1.name,
-			ships: req.game.team1.ships,
-			board: req.game.team1.board,
-			players: req.game.team1.players
-		},
-		team2: {
-			name: req.game.team2.name,
-			ships: req.game.team2.ships,
-			board: req.game.team2.board,
-			players: req.game.team2.players
-		}
-	};
-	res.json({ success: true, data: ret });
-})
+router.route('/battleship/:id')
+	.get(getpropgame, (req, res) => {
+		const ret = { 
+			creator: req.game.creator,
+			name: req.game.name,
+			started: req.game.started,
+			finished: req.game.finished,
+			team1: {
+				name: req.game.team1.name,
+				ships: req.game.team1.ships,
+				board: req.game.team1.board,
+				players: req.game.team1.players
+			},
+			team2: {
+				name: req.game.team2.name,
+				ships: req.game.team2.ships,
+				board: req.game.team2.board,
+				players: req.game.team2.players
+			}
+		};
+		res.json({ success: true, data: ret });
+	})
+	.delete( requireAdmin, (req, res) => {
+		Battleship.remove({ _id: req.params.id }, err => {
+			if (err) throw err;
+			return res.json({success: true, message: "Game deleted"});
+		});
+	})
 
 router.route('/battleship/:id/name')
 	.all( getgame )
