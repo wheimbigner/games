@@ -1,6 +1,7 @@
 {
   "name": "battleship",
   "main": "app/server.js",
+  "version": "1.0.0",
   "dependencies": {
     "bcrypt": "^0.8.7",
     "body-parser": "~1.0.1",
