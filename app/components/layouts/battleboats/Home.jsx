@@ -25,6 +25,7 @@ class Battleboats extends React.Component {
         ]
         this.onChange_gamename = this.onChange_gamename.bind(this);
         this.saveGamename = this.saveGamename.bind(this);
+        this.deleteGame = this.deleteGame.bind(this);
     }
     getChildContext() {
         return ({ router: this.context.router })
@@ -50,13 +51,28 @@ class Battleboats extends React.Component {
         boatApi.setGameName(this.props.params.game, this.state.gamename)
             .then( () => { this.setState({cansavename: false}) } )
     }
+    deleteGame() {
+        boatApi.deleteGame(this.props.params.game)
+            .then( () => { this.context.router.push('/games') } );
+    }
     render() {
         return (
             <Paper style={{ margin: 10, padding: 10 }} zDepth={1}>
-                { (this.props.admin) ? 
-                    <div style={{textAlign: 'center'}}>
-                        <TextField name="gamename" value={(this.state.gamename)} onChange={this.onChange_gamename} />
-                        <FlatButton label="save" primary={true} disabled={!this.state.cansavename} onClick={this.saveGamename}/>
+                { (this.props.admin) ?
+                    <div style={{display: 'flex'}}>
+                        <div style={{flex: '0 0 15%'}}>&nbsp;</div>
+                        <div style={{textAlign: 'center', flex: '0 0 70%'}}>
+                            <TextField name="gamename" value={(this.state.gamename)} onChange={this.onChange_gamename} />
+                            <FlatButton
+                                label="save"
+                                primary={true}
+                                disabled={!this.state.cansavename}
+                                onClick={this.saveGamename}
+                            />
+                        </div>
+                        <div style={{textAlign: 'right', flex: '0 0 15%'}}>
+                            <FlatButton label="delete" secondary={true} onClick={this.deleteGame} />
+                        </div>
                     </div>
                     :
                     <h1 style={{lineHeight: 0, textAlign: 'center'}}>{this.props.name}</h1>

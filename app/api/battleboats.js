@@ -31,6 +31,12 @@ export function getGame(game) {
         .then(response => { store.dispatch(getGameSuccess(response.data.data)); return response; });
 }
 
+export function deleteGame(game) {
+    const api = store.getState().api;
+    const config = { headers: {'x-access-token': api.token}};
+    return axios.delete(api.baseurl + '/battleship/' + game, config)    
+}
+
 export function getGrid(game, team) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
