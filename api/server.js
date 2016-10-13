@@ -198,7 +198,7 @@ router.route('/users/:user')
 			if (req.body.firstName) user.firstName = req.body.firstName;
 			if (req.body.lastName) user.lastName = req.body.lastName;
 			if (req.body.supervisor) user.supervisor = req.body.supervisor;
-			if (req.body.admin !== false) user.admin = req.body.admin;
+			user.admin = req.body.admin;
 
 			user.save(err2 => {
 				if (err2) throw err2;
