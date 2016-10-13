@@ -1,4 +1,4 @@
-var config = require('../config');
+var config = require('./config');
 var User = require('./models/users');
 var Battleship = require('./models/battleship');
 
