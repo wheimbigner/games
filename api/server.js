@@ -229,6 +229,7 @@ router.route('/battleship/:id')
 			name: req.game.name,
 			started: req.game.started,
 			finished: req.game.finished,
+			desc: req.game.desc,
 			team1: {
 				name: req.game.team1.name,
 				ships: req.game.team1.ships,
@@ -261,6 +262,19 @@ router.route('/battleship/:id/name')
 		req.game.save(err => {
 			if (err) throw err;
 			res.json({ success: true, name: req.game.name })
+		});
+	});
+
+router.route('/battleship/:id/desc')
+	.all( getgame )
+	.get( (req, res) => {
+		res.json({ success: true, name: req.game.desc });
+	})
+	.put( requireAdmin, (req, res) => {
+		req.game.desc = req.body.desc;
+		req.game.save(err => {
+			if (err) throw err;
+			res.json({ success: true, name: req.game.desc })
 		});
 	});
 

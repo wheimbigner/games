@@ -70,6 +70,20 @@ export function setGameNameSuccess(name) {
     }
 }
 
+export function getGameDescSuccess(desc) {
+    return {
+        type: types.GET_GAMEDESC_SUCCESS,
+        desc
+    }
+}
+
+export function setGameDescSuccess(desc) {
+    return {
+        type: types.SET_GAMEDESC_SUCCESS,
+        desc
+    }
+}
+
 export function getShadowBoardSuccess(team, shadowboard) {
     return {
         type: types.GET_SHADOWBOARD_SUCCESS,

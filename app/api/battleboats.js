@@ -9,6 +9,7 @@ import {
     fireSuccess,
     shotsChanged,
     getGameNameSuccess, setGameNameSuccess,
+    getGameDescSuccess, setGameDescSuccess,
     getShadowBoardSuccess, setShadowBoardSuccess
 } from '../actions/battleboats.js';
 
@@ -107,6 +108,20 @@ export function setGameName(game, name) {
     const config = { headers: {'x-access-token': api.token}};
     return axios.put(api.baseurl + '/battleship/' + game + '/name', { name }, config)
         .then(response => {store.dispatch(setGameNameSuccess(response.data.name)); return response});    
+}
+
+export function getGameDesc(game) {
+    const api = store.getState().api;
+    const config = { headers: {'x-access-token': api.token}};
+    return axios.get(api.baseurl + '/battleship/' + game + '/desc', config)
+        .then(response => {store.dispatch(getGameDescSuccess(response.data.desc)); return response});    
+}
+
+export function setGameDesc(game, desc) {
+    const api = store.getState().api;
+    const config = { headers: {'x-access-token': api.token}};
+    return axios.put(api.baseurl + '/battleship/' + game + '/desc', { desc }, config)
+        .then(response => {store.dispatch(setGameDescSuccess(response.data.desc)); return response});    
 }
 
 export function getTeamName(game, team) {

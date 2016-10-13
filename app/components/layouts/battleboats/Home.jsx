@@ -12,13 +12,15 @@ import * as boatApi from '../../../api/battleboats.js';
 class Battleboats extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { gamename: props.name, cansavename: false };
+        this.state = { gamename: props.name, cansavename: false, desc: props.desc, cansavedesc: false };
         this.nav = [ 
                 () => { this.context.router.push('/games/' + this.props.params.game + '/team/1/players') },
                 () => { this.context.router.push('/games/' + this.props.params.game + '/team/2/players') }
         ]
         this.onChange_gamename = this.onChange_gamename.bind(this);
         this.saveGamename = this.saveGamename.bind(this);
+        this.onChange_desc = this.onChange_desc.bind(this);
+        this.saveDesc = this.saveDesc.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
     }
     getChildContext() {
@@ -37,13 +39,23 @@ class Battleboats extends React.Component {
         if ( (newProps.name) && (this.state.gamename === this.props.name) ) {
             this.setState({gamename: newProps.name});
         }
+        if ( (newProps.desc) && (this.state.desc === this.props.desc) ) {
+            this.setState({desc: newProps.desc});
+        }
     }
     onChange_gamename(event) {
         this.setState({gamename: event.target.value, cansavename: true});        
     }
+    onChange_desc(event) {
+        this.setState({desc: event.target.value, cansavedesc: true});        
+    }
     saveGamename() {
         boatApi.setGameName(this.props.params.game, this.state.gamename)
             .then( () => { this.setState({cansavename: false}) } )
+    }
+    saveDesc() {
+        boatApi.setGameDesc(this.props.params.game, this.state.desc)
+            .then( () => { this.setState({cansavedesc: false}) } )
     }
     deleteGame() {
         boatApi.deleteGame(this.props.params.game)
@@ -53,23 +65,50 @@ class Battleboats extends React.Component {
         return (
             <Paper style={{ margin: 10, padding: 10 }} zDepth={1}>
                 { (this.props.admin) ?
-                    <div style={{display: 'flex'}}>
-                        <div style={{flex: '0 0 15%'}}>&nbsp;</div>
-                        <div style={{textAlign: 'center', flex: '0 0 70%'}}>
-                            <TextField name="gamename" value={(this.state.gamename)} onChange={this.onChange_gamename} />
-                            <FlatButton
-                                label="save"
-                                primary={true}
-                                disabled={!this.state.cansavename}
-                                onClick={this.saveGamename}
-                            />
-                        </div>
-                        <div style={{textAlign: 'right', flex: '0 0 15%'}}>
-                            <FlatButton label="delete" secondary={true} onClick={this.deleteGame} />
+                    <div>
+                        <div style={{display: 'flex'}}>
+                            <div style={{flex: '0 0 15%'}}>&nbsp;</div>
+                            <div style={{textAlign: 'center', flex: '0 0 70%'}}>
+                                <div style={{display: 'flex'}}>
+                                    <div style={{flex: '1 1 90%'}}>
+                                        <TextField name="gamename" value={this.state.gamename}
+                                            hintText="Untitled Game"
+                                            inputStyle={{textAlign: 'center'}}
+                                            fullWidth={true}
+                                            onChange={this.onChange_gamename} />
+                                    </div>
+                                    <div style={{flex: '1 1 10%'}}>
+                                        <FlatButton
+                                            label="save" primary={true} disabled={!this.state.cansavename}
+                                            onClick={this.saveGamename} />
+                                    </div>
+                                </div>
+                                <div style={{display: 'flex'}}>
+                                    <div style={{flex: '1 1 90%'}}>
+                                        <TextField name="description" value={this.state.desc}
+                                            hintText="Get a shot every time you do awesome things"
+                                            multiLine={true} rows={2} rowsMax={4}
+                                            textareaStyle={{textAlign: 'center'}}
+                                            fullWidth={true}
+                                            onChange={this.onChange_desc} />
+                                    </div>
+                                    <div style={{flex: '1 1 10%'}}>
+                                        <FlatButton
+                                            label="save" primary={true} disabled={!this.state.cansavedesc}
+                                            onClick={this.saveDesc} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{textAlign: 'right', flex: '0 0 15%'}}>
+                                <FlatButton label="delete" secondary={true} onClick={this.deleteGame} />
+                            </div>
                         </div>
                     </div>
                     :
-                    <h1 style={{lineHeight: 0, textAlign: 'center'}}>{this.props.name}</h1>
+                    <div>
+                        <h1 style={{lineHeight: 0, textAlign: 'center'}}>{this.props.name}</h1><br />
+                        <p style={{textAlign: 'center', whiteSpace: 'pre-wrap'}}>{this.props.desc}</p>
+                    </div>
                 }
                 <table>
                     <tbody>
@@ -107,6 +146,7 @@ Battleboats.propTypes = {
     players: React.PropTypes.array.isRequired,
     teamnames: React.PropTypes.array.isRequired,
     name: React.PropTypes.string.isRequired,
+    desc: React.PropTypes.string
 }
 Battleboats.contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -122,6 +162,7 @@ const mapStateToProps = function (store) {
         players: [store.battleboatState.team1.players, store.battleboatState.team2.players],
         teamnames: [store.battleboatState.team1.name, store.battleboatState.team2.name],
         name: store.battleboatState.name,
+        desc: store.battleboatState.desc,
         admin: store.api.admin
     };
 };

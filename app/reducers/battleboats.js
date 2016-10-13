@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 const initialState = {
     name: '',
+    desc: '',
     team1: {
         name: '',
         players: [],
@@ -44,6 +45,9 @@ const battleboatReducer = function (state = initialState, action) {
         case types.GET_GAMENAME_SUCCESS:
         case types.SET_GAMENAME_SUCCESS:
             return Object.assign({}, state, {name: action.name});
+        case types.GET_GAMEDESC_SUCCESS:
+        case types.SET_GAMEDESC_SUCCESS:
+            return Object.assign({}, state, {desc: action.desc});
         case types.SHOTS_CHANGED:
             var players = state[team].players;
             players[_.findIndex(players, function (o) { return o._id._id === action.player; })].shots = action.shots;
