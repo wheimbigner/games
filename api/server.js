@@ -1,11 +1,11 @@
-var config = require('./config');
+var config = require('config');
 var User = require('./models/users');
 var Battleship = require('./models/battleship');
 
 var jwt = require('jsonwebtoken');
 
 // var mailgun = require('mailgun');
-// var mg = new mailgun.Mailgun(config.mailgun.apikey);
+// var mg = new mailgun.Mailgun(config.get('mailgun.apikey'));
 
 var express = require('express');        // call express
 var app = express();                 // define our app using express
@@ -13,22 +13,22 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-if (config.debug) app.use(require('morgan')('dev'));
+if (config.get('debug')) app.use(require('morgan')('dev'));
 
 var mongoose = require('mongoose');
-if(config.debug) {
+if(config.get('debug')) {
 	mongoose.set('debug', true, function (coll, method, query, doc) {
 		console.log.debug('query executed:', coll, method, query, doc);
 	});
 }
-mongoose.connect(config.database);
+mongoose.connect(config.get('database'));
 
 router.get('/init', (req, res) => {
-	User.findOne({ _id: config.masterUser._id }, function (err, user) {
+	User.findOne({ _id: config.get('masterUser._id') }, function (err, user) {
 		if (err) throw err;
 		if (user)
 			return res.json({ success: false, message: 'User already initialized!' });
-		var master = new User(config.masterUser);
+		var master = new User(config.get('masterUser'));
 		master.save(err2 => {
 			if (err2) throw err2;
 			res.json({ success: true });
@@ -48,7 +48,7 @@ router.post('/authenticate', (req, res) => {
 			if (ismatch)
 				return res.json({
 					success: true, message: "Auth is good",
-					token: jwt.sign({ email: req.body.email.toLowerCase(), admin: user.admin }, config.jwtSecret, {})
+					token: jwt.sign({ email: req.body.email.toLowerCase(), admin: user.admin }, config.get('jwtSecret'), {})
 				});
 			res.status(403).json({ success: false, message: "Password's not good" });
 		});
@@ -77,7 +77,7 @@ router.post('/users/:user', (req, res) => {
 			if (err2) throw err2;
 			res.json({
 				success: true, message: "User created!",
-				token: jwt.sign({ email: req.params.user.toLowerCase(), admin: false }, config.jwtSecret, {})
+				token: jwt.sign({ email: req.params.user.toLowerCase(), admin: false }, config.get('jwtSecret'), {})
 			});
 		});
 	})
@@ -100,8 +100,8 @@ router.post('/users/:user/reset', (req, res) => {
 		if (!user) {
 			res.json({ success: false, message: "User not found" });
 		} else {
-			const token = jwt.sign({ email: req.params.user.toLowerCase(), admin: user.admin }, config.jwtSecret, {});
-			mg.sendText(config.mailgun.sender, req.params.user, "Reset your password",
+			const token = jwt.sign({ email: req.params.user.toLowerCase(), admin: user.admin }, config.get('jwtSecret'), {});
+			mg.sendText(config.get('mailgun.sender'), req.params.user, "Reset your password",
 				"Yes hello\n" +
 				"You asked for a password reset.\n" +
 				"Your password reset token is:\n" +
@@ -114,7 +114,7 @@ router.post('/users/:user/reset', (req, res) => {
 /* ***BEGIN AUTHORIZATION MIDDLEWARE*** */
 router.use(function (req, res, next) {
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
-	if (token) return jwt.verify(token, config.jwtSecret, (err, decoded) => {
+	if (token) return jwt.verify(token, config.get('jwtSecret'), (err, decoded) => {
 		if (err) return res.status(403).json({ success: false, message: 'Bad auth.' });
 		req.auth = decoded;
 		return next();
@@ -426,4 +426,4 @@ router.route('/battleship/:id/team/:team/name')
 
 app.use('/api', router);
 app.use('/', express.static('src/client/public'))
-app.listen(config.port);
+app.listen(config.get('port'));
