@@ -90,7 +90,13 @@ class Battleboats extends React.Component {
     }
 }
 Battleboats.propTypes = {
-    params: React.PropTypes.object.isRequired
+    params: React.PropTypes.object.isRequired,
+    admin: React.PropTypes.bool.isRequired,
+    ships: React.PropTypes.array.isRequired,
+    board: React.PropTypes.array.isRequired,
+    players: React.PropTypes.array.isRequired,
+    teamnames: React.PropTypes.array.isRequired,
+    name: React.PropTypes.string.isRequired,
 }
 Battleboats.contextTypes = {
     router: React.PropTypes.object.isRequired
