@@ -33,7 +33,7 @@
   -webkit-user-select: none;
   border-radius: 50%;
   box-shadow: 0 0 0 6px #222,
-    0 0 6px 10px #444
+    0 0 6px 10px #444;
 }
 
 /* TEXT */
@@ -45,29 +45,26 @@
   text-align: center;
   font: normal normal normal 12px/140px 
     'Electrolize', Helvetica, Arial, sans-serif;
-  color: #fff
+  color: #fff;
 }
 
 #content span {
   vertical-align: middle;
-  animation: fade 1s linear infinite
+  animation: fade 1s linear infinite;
 }
 
 /* SPINNING GRADIENT */
-.ring {
+#ring {
   margin: 0 auto;
   border-radius: 110px;
   padding: 10px;
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
-  animation: rotate 1s linear infinite
-}
-
-.blue {
+  animation: rotate 1s linear infinite;
   background: linear-gradient(#3cf,transparent,#3cf)
 }
 </style>
-      <div class='ring blue'></div>
+      <div id="ring"></div>
       <div id="content">
         <span>Loading.....</span>
       </div>
