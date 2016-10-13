@@ -103,6 +103,7 @@ class EditUserForm extends React.Component {
 				<AutoComplete floatingLabelText="Supervisor" hintText="type to search" dataSource={this.state.sups}
 					filter={AutoComplete.fuzzyFilter} maxSearchResults={10} openOnFocus={false}
 					fullWidth={true} searchText={this.state.supervisor}
+					onUpdateInput={input => { this.setState({ supervisor: input}) }}
 					onNewRequest={sup => { this.setState({ supervisor: (sup.value ? sup.value : sup) }); } } />
 				{this.props.admin ? (
 					<Checkbox label="Administrator" name="admin" onCheck={this.onCheck} checked={this.state.admin} />
