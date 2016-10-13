@@ -72,7 +72,7 @@ class Team extends React.Component {
                 </tr></tbody></table>
                 <Paper style={{ padding: 10, margin: 10 }} zDepth={3}>
                     {this.props.admin ? (
-                        <RaisedButton primary={true} label="Edit Player List" onClick={this.props.nav.editplayers} />
+                        <RaisedButton primary={true} label="Edit Player List" onClick={this.props.nav} />
                     ) : null}
                     <PlayerList players={this.props.players} admin={this.props.admin}
                         game={this.props.game} team={this.props.team} />
@@ -85,7 +85,7 @@ class Team extends React.Component {
 Team.propTypes = {
     ships: React.PropTypes.object.isRequired,
     admin: React.PropTypes.bool,
-    nav: React.PropTypes.object.isRequired,
+    nav: React.PropTypes.func.isRequired,
     game: React.PropTypes.string.isRequired,
     team: React.PropTypes.number.isRequired,
     board: React.PropTypes.array.isRequired,

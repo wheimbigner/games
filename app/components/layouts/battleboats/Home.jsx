@@ -14,14 +14,8 @@ class Battleboats extends React.Component {
         super(props);
         this.state = { gamename: props.name, cansavename: false };
         this.nav = [ 
-            {
-                editboard: () => { this.context.router.push('/games/' + this.props.params.game + '/team/1/board') },
-                editplayers: () => { this.context.router.push('/games/' + this.props.params.game + '/team/1/players') }
-            },
-            {
-                editboard: () => { this.context.router.push('/games/' + this.props.params.game + '/team/2/board') },
-                editplayers: () => { this.context.router.push('/games/' + this.props.params.game + '/team/2/players') }
-            }
+                () => { this.context.router.push('/games/' + this.props.params.game + '/team/1/players') },
+                () => { this.context.router.push('/games/' + this.props.params.game + '/team/2/players') }
         ]
         this.onChange_gamename = this.onChange_gamename.bind(this);
         this.saveGamename = this.saveGamename.bind(this);
