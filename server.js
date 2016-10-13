@@ -7,7 +7,7 @@ const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
 
-require('./api/server.js');
+// require('./api/server.js');
 
 var httpProxy = require('http-proxy');
 var proxy = httpProxy.createProxyServer({
