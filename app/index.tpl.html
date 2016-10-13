@@ -3,11 +3,74 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>react-kickstart</title>
-    <meta name="description" content="just another react + webpack boilerplate">
+    <title>Super Fun Adventure Game Time!</title>
+    <meta name="description" content="A place for playing cool games and stuff">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+<style>
+/* Spinny stuff modified from http://voidcanvas.com/css3-loader-snippet-collection-part-1-spinners/ */
+/* ANIMATION */
+@keyframes rotate { 
+  from { transform: rotate(0deg) } 
+  to { transform: rotate(360deg) } }
+
+@keyframes fade { 
+  from { opacity: 1 }
+  50% { opacity: 0 }
+  to { opacity: 1 } }
+
+/* CONTAINER */
+#root {
+  width: 150px;
+  height: 150px;
+  /* PRESENTATIONAL PURPOSES */
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px #222,
+    0 0 6px 10px #444
+}
+
+/* TEXT */
+#content {
+  background: linear-gradient(#222,#111);
+  position: absolute;
+  top: 5px; left: 5px; right: 5px; bottom: 5px;
+  border-radius: 50%;
+  text-align: center;
+  font: normal normal normal 12px/140px 
+    'Electrolize', Helvetica, Arial, sans-serif;
+  color: #fff
+}
+
+#content span {
+  vertical-align: middle;
+  animation: fade 1s linear infinite
+}
+
+/* SPINNING GRADIENT */
+.ring {
+  margin: 0 auto;
+  border-radius: 110px;
+  padding: 10px;
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  animation: rotate 1s linear infinite
+}
+
+.blue {
+  background: linear-gradient(#3cf,transparent,#3cf)
+}
+</style>
+      <div class='ring blue'></div>
+      <div id="content">
+        <span>Loading.....</span>
+      </div>
+    </div>
   </body>
 </html>
