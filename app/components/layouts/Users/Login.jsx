@@ -20,7 +20,7 @@ class SigninForm extends React.Component {
 				query: { new: true }
 			});
 		}
-		this.onClick_login = () => {
+		this.onClick_login = (e) => {
 			api.auth(this.state.email, this.state.password)
 				.then(response => {
 					if (response.data.success) {
@@ -30,17 +30,19 @@ class SigninForm extends React.Component {
 						api.message("Login failed");
 					}
 				});
+			e.preventDefault();
+			return false;
 		}
 	}
 
 	render() {
 		return (
-			<div>
+			<form onSubmit={this.onClick_login} action="" >
 				<TextField hintText="Email address" onChange={this.onChange_email} /><br />
 				<TextField hintText="Password" onChange={this.onChange_password} type="password" /><br />
-				<RaisedButton label="Login" primary={true} onClick={this.onClick_login} />
+				<RaisedButton label="Login" primary={true} type="submit" onClick={this.onClick_login} />
 				<FlatButton label="Sign up" primary={true} onClick={this.onClick_signup} />
-			</div>
+			</form>
 		);
 	}
 }
