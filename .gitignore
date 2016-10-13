@@ -40,3 +40,4 @@ jspm_packages
 .eslintrc.json
 config.js
 .vscode
+dist
