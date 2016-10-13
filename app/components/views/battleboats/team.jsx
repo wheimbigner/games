@@ -1,16 +1,35 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
 import Ship from './ship.jsx';
 import Grid from './grid.jsx';
+import EditBoard from './EditBoard.jsx'
 import PlayerList from './playerlist.jsx';
+
+import * as boatApi from '../../../api/battleboats.js';
 
 class Team extends React.Component {
     constructor(props) {
         super(props)
+        this.state = { name: props.name, cansave: false, editBoard: false };
+        this.onChange_name = this.onChange_name.bind(this);
+        this.saveName = this.saveName.bind(this);
+    }
+    componentWillReceiveProps(newProps) {
+        if ( (newProps.name) && (this.state.gamename === this.props.name) ) {
+            this.setState({name: newProps.name});
+        }
+    }
+    onChange_name(event) {
+        this.setState({name: event.target.value, cansave: true});        
+    }
+    saveName() {
+        boatApi.setTeamName(this.props.game, this.props.team, this.state.name)
+            .then( () => { this.setState({cansave: false}) } )
     }
     render() {
         return (
@@ -28,10 +47,26 @@ class Team extends React.Component {
                     <td style={{ width: '67%' }}>
                         <Paper style={{ padding: 10, margin: 10 }} zDepth={3}>
                             {this.props.admin ? (
-                                <RaisedButton primary={true} label="Edit board" onClick={this.props.nav.editboard} />
-                            ) : null }
-                            <h1 style={{lineHeight: 1, textAlign: 'center'}}>{this.props.name}</h1>
-                            <Grid game={this.props.game} team={this.props.team} board={this.props.board} />
+                            <div style={{display: 'flex'}}>
+                                <TextField name="gamename" value={(this.state.name)} onChange={this.onChange_name}
+                                    onBlur={this.saveName} />
+                                <FlatButton label="save" primary={true} disabled={!this.state.cansave} onClick={this.saveName} />
+                            </div>
+                            ) : ( 
+                                <h1 style={{lineHeight: 1, textAlign: 'center'}}>{this.props.name}</h1>
+                            )}
+                            {this.state.editBoard ? (
+                                <EditBoard game={this.props.game} team={this.props.team}
+                                    onSave={() => {this.setState({editBoard: false})}} />
+                            ) : (
+                                <Grid game={this.props.game} team={this.props.team} board={this.props.board} />
+                            )}
+                        {(this.props.admin && !this.state.editBoard)? (
+                            <div style={{textAlign: 'center', paddingTop: 10}}>
+                                <RaisedButton primary={true} label="Edit board"
+                                    onClick={() => {this.setState({editBoard: true})}} />
+                            </div>
+                        ) : null}
                         </Paper>
                     </td>
                 </tr></tbody></table>
