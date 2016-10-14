@@ -100,7 +100,7 @@ class Battleboats extends React.Component {
                                 </div>
                             </div>
                             <div style={{textAlign: 'right', flex: '0 0 15%'}}>
-                                <FlatButton label="delete" secondary={true} onClick={this.deleteGame} />
+                                <FlatButton label="delete game" secondary={true} onClick={this.deleteGame} />
                             </div>
                         </div>
                     </div>
