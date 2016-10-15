@@ -198,6 +198,7 @@ router.route('/users/:user')
 			if (req.body.firstName) user.firstName = req.body.firstName;
 			if (req.body.lastName) user.lastName = req.body.lastName;
 			if (req.body.supervisor) user.supervisor = req.body.supervisor;
+			if ('parttime' in req.body) user.parttime = req.body.parttime;
 			user.admin = req.body.admin;
 
 			user.save(err2 => {

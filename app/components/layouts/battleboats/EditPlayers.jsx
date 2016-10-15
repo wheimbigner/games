@@ -27,7 +27,7 @@ function PlayerList(props) {
                 <TableRow hoverable={false} key={index}>
                     <TableRowColumn>{player._id.firstName + ' ' + player._id.lastName}</TableRowColumn>
                     <TableRowColumn>{player._id._id}</TableRowColumn>
-                    <TableRowColumn>{player._id.parttime}</TableRowColumn>
+                    <TableRowColumn>{(player._id.parttime ? 'Yes' : 'No')}</TableRowColumn>
                     <TableRowColumn>{player._id.supervisor}</TableRowColumn>
                 </TableRow>
             )})}

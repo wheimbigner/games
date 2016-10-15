@@ -50,7 +50,7 @@ class UserListForm extends React.Component {
                     <TableRowColumn>{user._id}</TableRowColumn>
                     <TableRowColumn>{user.firstName}</TableRowColumn>
                     <TableRowColumn>{user.lastName}</TableRowColumn>
-                    <TableRowColumn>{(user.partTime ? 'Yes' : 'No')}</TableRowColumn>
+                    <TableRowColumn>{(user.parttime ? 'Yes' : 'No')}</TableRowColumn>
                     <TableRowColumn>{(user.admin ? 'Yes' : 'No')}</TableRowColumn>
                     <TableRowColumn>{user.supervisor}</TableRowColumn>
                     <TableRowColumn>{user.createdAt}</TableRowColumn>

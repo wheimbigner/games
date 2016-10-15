@@ -99,7 +99,7 @@ class EditUserForm extends React.Component {
 				<TextField name="lastName"
 					floatingLabelText="Last Name" hintText="Doe"
 					onChange={this.onChange} value={this.state.lastName} /><br />
-				<Checkbox label="Part-time" name="parttime" onCheck={this.onCheck} value={this.state.parttime} />
+				<Checkbox label="Part-time" name="parttime" onCheck={this.onCheck} checked={this.state.parttime} />
 				<AutoComplete floatingLabelText="Supervisor" hintText="type to search" dataSource={this.state.sups}
 					filter={AutoComplete.fuzzyFilter} maxSearchResults={10} openOnFocus={false}
 					fullWidth={true} searchText={this.state.supervisor}
