@@ -59,18 +59,9 @@ class Team extends React.Component {
                                 <EditBoard game={this.props.game} team={this.props.team}
                                     close={() => {this.setState({editBoard: false})}} />
                             ) : (
-                                <Grid game={this.props.game} team={this.props.team} board={this.props.board} />
+                                <Grid game={this.props.game} team={this.props.team} board={this.props.board}
+                                    edit={() => {this.setState({editBoard:true})}} admin={this.props.admin} />
                             )}
-                        {(this.props.admin && !this.state.editBoard)? (
-                            <div style={{display: 'flex', paddingTop: 10}}>
-                                <div style={{flex: '0 0 50%', textAlign: 'center'}}>
-                                    <RaisedButton primary={true} label="Edit board"
-                                        onClick={() => {this.setState({editBoard: true})}} />
-                                </div>
-                                <div style={{flex: '0 0 50%'}}>
-                                </div>                                
-                            </div>
-                        ) : null}
                         </Paper>
                     </td>
                 </tr></tbody></table>

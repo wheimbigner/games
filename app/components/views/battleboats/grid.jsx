@@ -1,4 +1,7 @@
 import React from 'react';
+
+import RaisedButton from 'material-ui/RaisedButton';
+
 import {fire} from '../../../api/battleboats.js';
 
 const colors = [
@@ -12,38 +15,48 @@ const colors = [
 ];
 
 export default function(props) {
-    return (
+    return (<div>
         <table style={{borderSpacing: 0}}>
-        <tbody>
-            <tr>
-                <th />
-                <th>A</th>
-                <th>B</th>
-                <th>C</th>
-                <th>D</th>
-                <th>E</th>
-                <th>F</th>
-                <th>G</th>
-                <th>H</th>
-                <th>I</th>
-                <th>J</th>
-            </tr>
-            {props.board.map((row, y) => {return(
-            <tr key={'row' + y}>
-                <th>{''+(y+1)}</th>
-                {row.map((cell, x) => {
-                    return(
-                        <td
-                            key={'cellx'+x+'y'+y} data-x={x} data-y={y}
-                            onClick={(event) => {
-                                fire(props.game, props.team, event.target.dataset.x, event.target.dataset.y)
-                            }} style={{width: 30, height: 30, background: colors[cell], fontColor: 'white'}}
-                        />
-                    )
-                })}
-            </tr>
-            )})}
-        </tbody>
-    </table>
-    );
+            <tbody>
+                <tr>
+                    <th />
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                    <th>F</th>
+                    <th>G</th>
+                    <th>H</th>
+                    <th>I</th>
+                    <th>J</th>
+                </tr>
+                {props.board.map((row, y) => {return(
+                <tr key={'row' + y}>
+                    <th>{''+(y+1)}</th>
+                    {row.map((cell, x) => {
+                        return(
+                            <td
+                                key={'cellx'+x+'y'+y} data-x={x} data-y={y}
+                                onClick={(event) => {
+                                    fire(props.game, props.team, event.target.dataset.x, event.target.dataset.y)
+                                }} style={{width: 30, height: 30, background: colors[cell], fontColor: 'white'}}
+                            />
+                        )
+                    })}
+                </tr>
+                )})}
+            </tbody>
+        </table>
+        {props.admin ?
+            <div style={{display: 'flex', paddingTop: 10}}>
+                <div style={{flex: '0 0 50%', textAlign: 'center'}}>
+                    <RaisedButton primary={true} label="Edit board"
+                        onClick={props.edit} />
+                </div>
+                <div style={{flex: '0 0 50%'}}>
+                </div>                                
+            </div>
+        : null}
+    </div>);
 }
