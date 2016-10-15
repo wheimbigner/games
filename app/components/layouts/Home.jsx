@@ -9,8 +9,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import Ackbar from '../containers/Ackbar.jsx';
+import About from '../views/About.jsx';
 
 class Home extends React.Component {
 	constructor(props) {
@@ -28,10 +30,11 @@ class Home extends React.Component {
 						title={(
 							<div style={{display: 'flex', justifyContent: 'space-between'}}>
 								<div style={{flex: true}}>{this.props.title}</div>
-								<div style={{flex: true}}>{this.props.email}</div>
+								<div style={{flex: true}}>{this.props.email}&nbsp;&nbsp;</div>
 							</div>
 						)}
 						onLeftIconButtonTouchTap={this.toggleDrawer}
+						iconElementRight={(<RaisedButton label='About / Feedback' onClick={() => {this.refs.about.open()}} />)}
 					/>
 					{this.props.children}
 					<Drawer open={this.state.drawerOpen} docked={false} onRequestChange={(open) => this.setState({ drawerOpen: open }) }>
@@ -41,6 +44,7 @@ class Home extends React.Component {
 							<MenuItem onTouchTap={() => { this.closeDrawer(); } }>My Profile</MenuItem>
 						</Link>
 					</Drawer>
+					<About ref="about" />
 					<Ackbar />
 				</div>
 			</MuiThemeProvider>
