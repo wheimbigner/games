@@ -20,7 +20,7 @@ class Team extends React.Component {
         this.saveName = this.saveName.bind(this);
     }
     componentWillReceiveProps(newProps) {
-        if ( (newProps.name) && (this.state.gamename === this.props.name) ) {
+        if ( (newProps.name) && (this.state.name === this.props.name) ) {
             this.setState({name: newProps.name});
         }
     }
