@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
@@ -11,7 +12,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 import Ackbar from '../containers/Ackbar.jsx';
 
-export default class Home extends React.Component {
+class Home extends React.Component {
 	constructor(props) {
 		super(props);
 		const auth = (Cookies.get('token') ? jwt_decode(Cookies.get('token')) : false )
@@ -23,7 +24,15 @@ export default class Home extends React.Component {
 		return (
 			<MuiThemeProvider>
 				<div>
-					<AppBar title="Games!" onLeftIconButtonTouchTap={this.toggleDrawer} />
+					<AppBar
+						title={(
+							<div style={{display: 'flex', justifyContent: 'space-between'}}>
+								<div style={{flex: true}}>{this.props.title}</div>
+								<div style={{flex: true}}>{this.props.email}</div>
+							</div>
+						)}
+						onLeftIconButtonTouchTap={this.toggleDrawer}
+					/>
 					{this.props.children}
 					<Drawer open={this.state.drawerOpen} docked={false} onRequestChange={(open) => this.setState({ drawerOpen: open }) }>
 						<Link to="/games"><MenuItem onTouchTap={() => { this.closeDrawer(); } }>Battleship games</MenuItem></Link>
@@ -44,3 +53,11 @@ Home.propTypes = {
 Home.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
+const mapStateToProps = function (store) {
+    return {
+		email: store.api.email,
+		admin: store.api.admin,
+		title: store.api.title
+	}
+}
+export default connect(mapStateToProps)(Home);

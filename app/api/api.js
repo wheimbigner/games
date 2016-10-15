@@ -2,13 +2,17 @@ import axios from 'axios';
 import store from '../store.js';
 import {
     authSuccess,
-    snackbar
+    snackbar,
+    updateTitle
 } from '../actions/api.js';
 
 export function message(_message) {
     store.dispatch(snackbar(_message));
 }
 
+export function title(_title) {
+    store.dispatch(updateTitle(_title));
+}
 export function auth(email, password) {
     const api = store.getState().api;
     return axios.post(api.baseurl + '/authenticate', {email, password})

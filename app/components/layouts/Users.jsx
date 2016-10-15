@@ -26,6 +26,7 @@ class UserListForm extends React.Component {
             .then(response => {
                 this.setState({users: response.data.users});
             })
+        api.title('User list');
     }
   render() {
     return (

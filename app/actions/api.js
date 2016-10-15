@@ -12,3 +12,9 @@ export function snackbar(message) {
         message
     }
 }
+export function updateTitle(title) {
+    return {
+        type: types.UPDATE_TITLE,
+        title
+    }
+}

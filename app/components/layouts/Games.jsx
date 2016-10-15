@@ -4,6 +4,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import RaisedButton from 'material-ui/RaisedButton';
 
 import * as boatApi from '../../api/battleboats.js';
+import * as api from '../../api/api.js';
 
 class GameListForm extends React.Component {
 	constructor(props) {
@@ -23,6 +24,7 @@ class GameListForm extends React.Component {
 			.then(response => {
 				this.setState({ games: response.data.games });
 			});
+		api.title('Game list');
 	}
 	render() {
 		return (

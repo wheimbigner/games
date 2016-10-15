@@ -34,7 +34,9 @@ class SigninForm extends React.Component {
 			return false;
 		}
 	}
-
+	componentWillMount() {
+		api.title('Sign in');
+	}
 	render() {
 		return (
 			<form onSubmit={this.onClick_login} action="" >

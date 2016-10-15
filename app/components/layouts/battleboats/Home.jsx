@@ -7,6 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import Team from '../../views/battleboats/team.jsx';
 import * as boatApi from '../../../api/battleboats.js';
+import * as api from '../../../api/api.js';
 
 
 class Battleboats extends React.Component {
@@ -28,6 +29,7 @@ class Battleboats extends React.Component {
     }
     componentWillMount() {
         boatApi.getGame(this.props.params.game);
+        api.title(this.props.name);
     }
     componentDidMount() {
         this.timer = setInterval(  () => { boatApi.getGame(this.props.params.game); },  10000  );
@@ -42,6 +44,7 @@ class Battleboats extends React.Component {
         if ( (newProps.desc) && (this.state.desc === this.props.desc) ) {
             this.setState({desc: newProps.desc});
         }
+        if ('name' in newProps && (this.props.name !== newProps.name)) api.title(newProps.name);
     }
     onChange_gamename(event) {
         this.setState({gamename: event.target.value, cansavename: true});        
@@ -86,7 +89,7 @@ class Battleboats extends React.Component {
                                 <div style={{display: 'flex'}}>
                                     <div style={{flex: '1 1 90%'}}>
                                         <TextField name="description" value={this.state.desc}
-                                            hintText="Get a shot every time you do awesome things"
+                                            hintText="Put description/info about the game here"
                                             multiLine={true} rows={2} rowsMax={4}
                                             textareaStyle={{textAlign: 'center'}}
                                             fullWidth={true}
@@ -106,7 +109,6 @@ class Battleboats extends React.Component {
                     </div>
                     :
                     <div>
-                        <h1 style={{lineHeight: 0, textAlign: 'center'}}>{this.props.name}</h1><br />
                         <p style={{textAlign: 'center', whiteSpace: 'pre-wrap'}}>{this.props.desc}</p>
                     </div>
                 }

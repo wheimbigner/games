@@ -18,4 +18,5 @@ export const SHOTS_CHANGED = 'SHOTS_CHANGED';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 
+export const UPDATE_TITLE = 'UPDATE_TITLE';
 export const SNACKBAR_MESSAGE = 'SNACKBAR_MESSAGE';
