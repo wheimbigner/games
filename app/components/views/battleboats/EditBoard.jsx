@@ -1,6 +1,7 @@
 import React from 'react';
 
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 
 import * as boatApi from '../../../api/battleboats.js';
 import * as api from '../../../api/api.js';
@@ -25,7 +26,7 @@ class EditBoard extends React.Component {
 			const board = this.state.board.map(row => { return row.map(cell => { return (cell ? cell : 0); }) })
 			boatApi.setShadowBoard(this.props.game, this.props.team, board)
 				.then( (response) => { 
-					if (response.data.success) {api.message("Board saved successfully!"); this.props.onSave()}
+					if (response.data.success) {api.message("Board saved successfully!"); this.props.close()}
 					else {api.message(response.data.message)}
 				});
 		}
@@ -93,8 +94,9 @@ class EditBoard extends React.Component {
 						)})}
 					</tbody>
 				</table>
-				<div style={{textAlign: 'center', paddingTop: 10}}>
-					<RaisedButton label="Save" primary={true} onClick={this.save} />
+				<div style={{textAlign: 'center', paddingTop: 10, display: 'flex'}}>
+					<div style={{flex: '0 0 50%'}}><RaisedButton label="Save" primary={true} onClick={this.save} /></div>
+					<div style={{flex: '0 0 50%'}}><FlatButton label="Cancel" primary={true} onClick={this.props.close} /></div>
 				</div>
 			</div>
 		)
@@ -103,7 +105,7 @@ class EditBoard extends React.Component {
 EditBoard.propTypes = {
 	game: React.PropTypes.string.isRequired,
 	team: React.PropTypes.number.isRequired,
-	onSave: React.PropTypes.func.isRequired
+	close: React.PropTypes.func.isRequired
 };
 
 export default EditBoard;
