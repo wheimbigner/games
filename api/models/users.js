@@ -13,7 +13,7 @@ var UserSchema = new Schema(
 		firstName: String,
 		lastName: String,
 		supervisor: String,
-		parttime: Boolean,
+		parttime: { type: Boolean, default: false },
 		admin: { type: Boolean, default: false },
 		lastlogin: Date,
 	},
