@@ -63,19 +63,23 @@ var Ships = new Schema({
 var Team = new Schema({
     name: { type: String, default: "Untitled team" },
     board: {
-        type: mongoose.Schema.Types.Array,
+        type: Schema.Types.Array,
         default: Array(10).fill(Array(10).fill(0))
     },
     ships: { type: Ships, default: {} },
     shadowboard: {
-        type: mongoose.Schema.Types.Array,
+        type: Schema.Types.Array,
         default: Array(10).fill(Array(10).fill(0))
     },
     players: [TeamPlayer]
 });
 
 module.exports = mongoose.model('Battleship', new Schema({
-	creator: {type: String, required: true },
+	creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     name: { type: String, default: "Untitled game" },
     started: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
