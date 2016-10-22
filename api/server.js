@@ -115,11 +115,11 @@ router.post('/users/:user/reset', (req, res) => {
 router.use(function (req, res, next) {
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
 	if (token) return jwt.verify(token, config.get('jwtSecret'), (err, decoded) => {
-		if (err) return res.status(403).json({ success: false, message: 'Bad auth.' });
+		if (err) return res.status(401).json({ success: false, message: 'Bad auth.' });
 		req.auth = decoded;
 		return next();
 	});
-	return res.status(403).json({ success: false, message: 'Auth first.' });
+	return res.status(401).json({ success: false, message: 'Auth first.' });
 });
 /* ***END AUTHORIZATION MIDDLEWARE*** */
 
