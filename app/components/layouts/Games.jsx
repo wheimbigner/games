@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -29,7 +30,9 @@ class GameListForm extends React.Component {
 	render() {
 		return (
 			<div>
+				{this.props.admin ? 
 				<RaisedButton label="New Game" onClick={this.newGame} primary={true} />
+				: null }
 				<Table onRowSelection={this.onSelect}>
 					<TableHeader displaySelectAll={false} adjustForCheckbox={false} enableSelectAll={false}>
 						<TableRow selectable={false}>
@@ -63,4 +66,9 @@ GameListForm.propTypes = {
 GameListForm.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
-export default GameListForm;
+const mapStateToProps = function (store) {
+    return {
+		admin: store.api.admin,
+	}
+}
+export default connect(mapStateToProps)(GameListForm);
