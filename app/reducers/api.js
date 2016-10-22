@@ -25,9 +25,11 @@ const apiReducer = function (state = initialState, action) {
                 admin: jwt_decode(action.token).admin
             });
         case types.AUTH_LOGOUT:
+            Cookies.remove('token');
             return Object.assign({}, state, {
                 token: '',
-                admin: false
+                admin: false,
+                email: ''
             })
         case types.SNACKBAR_MESSAGE:
             return Object.assign({}, state, {

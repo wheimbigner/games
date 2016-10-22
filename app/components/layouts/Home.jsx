@@ -13,6 +13,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import Ackbar from '../containers/Ackbar.jsx';
 import About from '../views/About.jsx';
+import * as api from '../../api/api.js';
 
 class Home extends React.Component {
 	constructor(props) {
@@ -43,6 +44,7 @@ class Home extends React.Component {
 						<Link to={'/users/' +  (this.state.auth.email ? this.state.auth.email : 'new')}>
 							<MenuItem onTouchTap={() => { this.closeDrawer(); } }>My Profile</MenuItem>
 						</Link>
+						<Link to="/"><MenuItem onTouchTap={() => { api.logout(); this.closeDrawer(); } }>Log Out</MenuItem></Link>
 					</Drawer>
 					<About ref="about" />
 					<Ackbar />

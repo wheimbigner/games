@@ -6,6 +6,11 @@ export function authSuccess(token) {
         token
     };
 }
+export function _logout() {
+    return {
+        type: types.AUTH_LOGOUT
+    };
+}
 export function snackbar(message) {
     return {
         type: types.SNACKBAR_MESSAGE,

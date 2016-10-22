@@ -3,7 +3,8 @@ import store from '../store.js';
 import {
     authSuccess,
     snackbar,
-    updateTitle
+    updateTitle,
+    _logout
 } from '../actions/api.js';
 
 export function message(_message) {
@@ -21,7 +22,9 @@ export function auth(email, password) {
             return response;
         });
 }
-
+export function logout() {
+    store.dispatch(_logout());
+}
 export function getUsers(params = {}) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
