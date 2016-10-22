@@ -14,6 +14,7 @@ export function message(_message) {
 export function title(_title) {
     store.dispatch(updateTitle(_title));
 }
+
 export function auth(email, password) {
     const api = store.getState().api;
     return axios.post(api.baseurl + '/authenticate', {email, password})
@@ -22,9 +23,11 @@ export function auth(email, password) {
             return response;
         });
 }
+
 export function logout() {
     store.dispatch(_logout());
 }
+
 export function getUsers(params = {}) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
@@ -51,8 +54,7 @@ export function addUser(user, data) {
 export function updateUser(user, data) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
-    return axios.patch(api.baseurl + '/users/' + user, data, config);
-    
+    return axios.patch(api.baseurl + '/users/' + user, data, config);   
 }
 
 export function deleteUser(user) {
