@@ -11,9 +11,9 @@ import * as api from '../../../api/api.js';
 class SigninForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { email: '', password: '' };
-		this.onChange_email = event => { this.setState({ email: event.target.value }) };
-		this.onChange_password = event => { this.setState({ password: event.target.value }) };
+		this.state = { email: '', password: '', message: '' };
+		this.onChange_email = event => { this.setState({ email: event.target.value, message: '' }) };
+		this.onChange_password = event => { this.setState({ password: event.target.value, message: '' }) };
 		this.onClick_signup = () => {
 			this.context.router.push({
 				pathname: '/users/' + (this.state.email ? this.state.email : 'new'),
@@ -29,6 +29,9 @@ class SigninForm extends React.Component {
 					} else {
 						api.message("Login failed");
 					}
+				})
+				.catch(error => {
+					this.setState({ message: error.response.data.message, messageColor: 'red' });
 				});
 			e.preventDefault();
 			return false;
@@ -44,6 +47,7 @@ class SigninForm extends React.Component {
 				<TextField hintText="Password" onChange={this.onChange_password} type="password" /><br />
 				<RaisedButton label="Login" primary={true} type="submit" onClick={this.onClick_login} />
 				<FlatButton label="Sign up" primary={true} onClick={this.onClick_signup} />
+				<div style={{ color: 'red', fontWeight: 'bold', margin: 10 }}>{this.state.message}</div>
 			</form>
 		);
 	}
