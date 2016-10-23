@@ -118,7 +118,7 @@ router.post('/users/:user/reset', (req, res) => {
 				subject: "HAHAHAHAHAHA YOU FORGOT YOUR PASSWORD",
 				text: "You asked for a password reset.\n" +
 				"Your password reset url is:\n" +
-				config.get('url') + '?action=reset&token=' + token + "\n" +
+				config.get('url') + '#/reset?token=' + token + "\n" +
 				"This link is good for unlimited uses for the next 15 minutes."
 			}, (err, body) => {
 				if (err) throw err;
