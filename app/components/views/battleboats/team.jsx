@@ -53,7 +53,7 @@ class Team extends React.Component {
                                 <FlatButton label="save" primary={true} disabled={!this.state.cansave} onClick={this.saveName} />
                             </div>
                             ) : ( 
-                                <h1 style={{lineHeight: 1, textAlign: 'center'}}>{this.props.name}</h1>
+                                <h1 style={{lineHeight: '0.3em', textAlign: 'center'}}>{this.props.name}</h1>
                             )}
                             {this.state.editBoard ? (
                                 <EditBoard game={this.props.game} team={this.props.team}
