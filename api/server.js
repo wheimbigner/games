@@ -4,11 +4,10 @@ var Battleship = require('./models/battleship');
 
 var jwt = require('jsonwebtoken');
 
-// var mailgun = require('mailgun');
-// var mg = new mailgun.Mailgun(config.get('mailgun.apikey'));
+var mg = require('mailgun-js')({apiKey: config.get('mailgun.apikey'), domain: config.get('mailgun.domain')});;
 
-var express = require('express');        // call express
-var app = express();                 // define our app using express
+var express = require('express');
+var app = express();
 var router = express.Router();
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,10 +35,20 @@ router.get('/init', (req, res) => {
 	});
 });
 
+router.use(function (req, res, next) {
+	if (req.params.user)
+		req.params.user = req.params.user.toLowerCase();
+	if (req.params.player)
+		req.params.player = req.params.player.toLowerCase();
+	if (req.body.email)
+		req.body.email = req.body.email.toLowerCase();
+	return next();
+});
+
 // TODO: this should update last login
 // TODO: If we save it, it'll weird out updatedOn. Maybe find a fix.
 router.post('/authenticate', (req, res) => {
-	User.findOne({ _id: req.body.email.toLowerCase() }, (err, user) => {
+	User.findOne({ _id: req.body.email }, (err, user) => {
 		if (err) throw err;
 		if (!user)
 			return res.status(404).json({ success: false, message: "User not found" });
@@ -48,7 +57,8 @@ router.post('/authenticate', (req, res) => {
 			if (ismatch)
 				return res.json({
 					success: true, message: "Auth is good",
-					token: jwt.sign({ email: req.body.email.toLowerCase(), admin: user.admin }, config.get('jwtSecret'), {})
+					token: jwt.sign({ email: req.body.email, admin: user.admin }, config.get('jwtSecret'),
+					{ algorithm: 'HS512', expiresIn: '3d' })
 				});
 			res.status(403).json({ success: false, message: "Password's not good" });
 		});
@@ -61,7 +71,7 @@ router.post('/authenticate', (req, res) => {
  * @apiParam {String} user Email address of the user to create. 
  */
 router.post('/users/:user', (req, res) => {
-	User.findOne({ _id: req.params.user.toLowerCase() }, (err, user) => {
+	User.findOne({ _id: req.params.user }, (err, user) => {
 		if (err) throw err;
 		if (user) return res.status(400).json({ success: false, message: "User already exists" });
 		var newuser = new User({
@@ -77,7 +87,9 @@ router.post('/users/:user', (req, res) => {
 			if (err2) throw err2;
 			res.json({
 				success: true, message: "User created!",
-				token: jwt.sign({ email: req.params.user.toLowerCase(), admin: false }, config.get('jwtSecret'), {})
+				token: jwt.sign({ email: req.params.user, admin: false }, config.get('jwtSecret'), 
+					{ algorithm: 'HS512', expiresIn: '3d' }
+				)
 			});
 		});
 	})
@@ -92,24 +104,29 @@ router.get('/users', (req, res) => {
 	});
 });
 
-/*
-Not yet ready for implementation
 router.post('/users/:user/reset', (req, res) => {
 	User.findOne({ _id: req.params.user }, (err, user) => {
 		if (err) throw err;
-		if (!user) {
-			res.json({ success: false, message: "User not found" });
+		if (!(user)) {
+			res.status(404).json({ success: false, message: "User not found" });
 		} else {
-			const token = jwt.sign({ email: req.params.user.toLowerCase(), admin: user.admin }, config.get('jwtSecret'), {});
-			mg.sendText(config.get('mailgun.sender'), req.params.user, "Reset your password",
-				"Yes hello\n" +
-				"You asked for a password reset.\n" +
-				"Your password reset token is:\n" +
-				token);
+			const token = jwt.sign({ email: req.params.user }, config.get('jwtSecret'),
+				{ algorithm: 'HS512', expiresIn: '15m' });
+			mg.messages().send({
+				from: config.get('mailgun.sender'),
+				to: req.params.user,
+				subject: "HAHAHAHAHAHA YOU FORGOT YOUR PASSWORD",
+				text: "You asked for a password reset.\n" +
+				"Your password reset url is:\n" +
+				config.get('url') + '?action=reset&token=' + token + "\n" +
+				"This link is good for unlimited uses for the next 15 minutes."
+			}, (err, body) => {
+				if (err) throw err;
+				return res.json({ success: true, message: "Reset token sent" });
+			});
 		}
 	})
 })
-*/
 
 /* ***BEGIN AUTHORIZATION MIDDLEWARE*** */
 router.use(function (req, res, next) {
@@ -167,31 +184,31 @@ const getboard = function (req, res, next) {
 
 const getplayer = function (req, res, next) {
 	if (!req.params.player) return res.status(400).json({ success: false, message: "How did you find this?" });
-	req.player = req.gameboard.players.id(req.params.player.toLowerCase());
+	req.player = req.gameboard.players.id(req.params.player);
 	if (!req.player) return res.status(404).json({ success: false, message: "Couldn't find player" });
 	next();
 }
 
 router.route('/users/:user')
 	.get( (req, res) => {
-		User.findOne( { _id: req.params.user.toLowerCase() }, (err, user) => {
+		User.findOne( { _id: req.params.user }, (err, user) => {
 			if (err) throw err;
 			if (!user) return res.status(404).json({success: false, message: "User not found"});
 			return res.json({ success: true, user: user });
 		});
 	})
 	.delete( requireAdmin, (req, res) => {
-		User.remove({ _id: req.params.user.toLowerCase() }, err => {
+		User.remove({ _id: req.params.user }, err => {
 			if (err) throw err;
 			return res.json({success: true, message: "User deleted"});
 		});
 	})
 	.patch( (req, res) => {
-		if (!req.auth.admin && (req.auth.email !== req.params.user.toLowerCase()))
+		if (!req.auth.admin && (req.auth.email !== req.params.user))
 			return res.json({ success: false, message: "You're not allowed to change their settings." });
 		if (!req.auth.admin && req.body.admin)
 			return res.json({ success: false, message: "You can't make yourself an admin" })
-		User.findOne({ _id: req.params.user.toLowerCase() }, (err, user) => {
+		User.findOne({ _id: req.params.user }, (err, user) => {
 			if (err) throw err;
 			if (!user) return res.json({ success: false, message: "User doesn't exist" })
 			if (req.body.password) user.password = req.body.password;
@@ -300,16 +317,16 @@ router.route('/battleship/:id/team/:team/ships')
 router.route('/battleship/:id/team/:team/player/:player')
 	.all( requireAdmin, getgame, getboard )
 	.post( (req, res) => {
-		if (req.gameboard.players.id(req.params.player.toLowerCase()))
+		if (req.gameboard.players.id(req.params.player))
 			return res.status(400).json({ success: false, message: "Player already exists" });
-		req.gameboard.players.push({ _id: req.params.player.toLowerCase() });
+		req.gameboard.players.push({ _id: req.params.player });
 		req.game.save(err => {
 			if (err) throw err;
 			return res.json({ success: true });
 		});
 	})
 	.delete( (req, res) => {
-		req.gameboard.players.id(req.params.player.toLowerCase()).remove();
+		req.gameboard.players.id(req.params.player).remove();
 		req.game.save(err => {
 			if (err) throw err;
 			res.json({ success: true, players: req.gameboard.players});

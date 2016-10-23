@@ -3,7 +3,8 @@
 	"database": "mongodb://games:password@127.0.0.1:27017/games",
 	"mailgun": {
 		"apikey": "mailgun-api-key",
-		"sender": "donotreply@youdomain.com"
+		"sender": "donotreply@youdomain.com",
+		"domain": "youdomain.com"
 	},
 	"port": 8080,
 	"allowCORS": true,
@@ -15,5 +16,6 @@
 		"lastName": "Administrator",
 		"supervisor": "",
 		"admin": true		
-	}
+	},
+	"url": "http://example.com/"
 }
