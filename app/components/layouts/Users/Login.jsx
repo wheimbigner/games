@@ -27,15 +27,26 @@ class SigninForm extends React.Component {
 						Cookies.set('token', response.data.token);
 						this.context.router.push('/games');
 					} else {
-						api.message("Login failed");
+						this.setState({ message: response.data.message });
 					}
 				})
 				.catch(error => {
-					this.setState({ message: error.response.data.message, messageColor: 'red' });
+					this.setState({ message: error.response.data.message });
 				});
 			e.preventDefault();
 			return false;
 		}
+		this.onClick_reset = this.onClick_reset.bind(this);
+	}
+	onClick_reset() {
+		api.reset(this.state.email)
+			.then(response => {
+				if (response.data.success) {
+					this.setState({ message: 'Password reset sent, check your junk folder' });
+				} else {
+					this.setState({ message: 'Something went wrong trying to send the password reset' });
+				}
+			});
 	}
 	componentWillMount() {
 		api.title('Sign in');
@@ -47,7 +58,12 @@ class SigninForm extends React.Component {
 				<TextField hintText="Password" onChange={this.onChange_password} type="password" /><br />
 				<RaisedButton label="Login" primary={true} type="submit" onClick={this.onClick_login} />
 				<FlatButton label="Sign up" primary={true} onClick={this.onClick_signup} />
-				<div style={{ color: 'red', fontWeight: 'bold', margin: 10 }}>{this.state.message}</div>
+				{this.state.message ? (
+				<div style={{ color: 'red', fontWeight: 'bold', margin: 10 }}>
+					<div>{this.state.message}</div>
+					<FlatButton label="Reset password" secondary={true} onClick={this.onClick_reset} />
+				</div>
+				):null}
 			</form>
 		);
 	}

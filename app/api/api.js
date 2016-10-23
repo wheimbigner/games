@@ -24,6 +24,11 @@ export function auth(email, password) {
         });
 }
 
+export function reset(email) {
+    const api = store.getState().api;
+    return axios.post(api.baseurl + '/users/' + email + '/reset', {});
+}
+
 export function logout() {
     store.dispatch(_logout());
 }
@@ -51,9 +56,9 @@ export function addUser(user, data) {
         });
 }
 
-export function updateUser(user, data) {
+export function updateUser(user, data, token='') {
     const api = store.getState().api;
-    const config = { headers: {'x-access-token': api.token}};
+    const config = { headers: {'x-access-token': (token ? token : api.token)}};
     return axios.patch(api.baseurl + '/users/' + user, data, config);   
 }
 
