@@ -405,6 +405,11 @@ function validateShipPlacement(board) {
 	// 50555
 	// 50000
 	const shipcount = Array(5).fill(0);
+	for (let y = 0; (y < 10); y++) {
+		for (let x = 0; (x < 10); x++) {
+			if (board[y][x]) shipcount[board[y][x]-1]++;
+		}
+	}
 	for (let i=1; i <= 5; i++) {
 		let foundship = 0;
 		for (let y = 0; (y < 10) && !foundship; y++) {
@@ -412,9 +417,7 @@ function validateShipPlacement(board) {
 				if (board[y][x] === i) foundship = board[y][x];
 				for (let c = (foundship > 2) ? foundship - 1 : foundship; (c >= 0) && foundship; c--) {
 					if ((board[y][x+c] !== foundship) && ((board[y+c]) && (board[y+c][x] !== foundship))) return false;
-					shipcount[i-1]++;
-				}
-				
+				}				
 			}
 		}
 	}
@@ -427,6 +430,9 @@ router.route('/battleship/:id/team/:team/shadowboard')
 		res.json({success: true, board: req.gameboard.shadowboard});
 	})
 	.put( (req, res) => {
+		if (req.game.started) {
+			return res.json({ success: false, message: "Can't update the shadowboard for a game that's in progress!"});
+		} 
 		for (let y = 0; y < 10; y++) {
 			for (let x = 0; x < 10; x++) {
 				req.body.board[y][x] = parseInt(req.body.board[y][x], 10);
