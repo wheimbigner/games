@@ -76,7 +76,7 @@ var Team = new Schema({
 
 module.exports = mongoose.model('Battleship', new Schema({
 	creator: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'User',
         required: true
     },
