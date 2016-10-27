@@ -115,7 +115,7 @@ router.post('/users/:user/reset', (req, res) => {
 			mg.messages().send({
 				from: config.get('mailgun.sender'),
 				to: req.params.user,
-				subject: "HAHAHAHAHAHA YOU FORGOT YOUR PASSWORD",
+				subject: "password reset request",
 				text: "You asked for a password reset.\n" +
 				"Your password reset url is:\n" +
 				config.get('url') + '#/reset?token=' + token + "\n" +
@@ -156,12 +156,8 @@ const _getgame = function(req, res, next, pop) {
 			return res.status(404).json({ success: false, message: "Invalid id!" });
 		} else if (err)
 			throw err;
-
 		req.game = game;
-// changing this so that anyone has view-access to all games, because why not?		
-//		if ( req.auth.admin || game.team1.players.id(req.auth.email) || game.team2.players.id(req.auth.email)	)
 		next();
-//		return res.status(403).json({ success: false, message: "Authorization failed in _getgame" });
 	});
 }
 const getpropgame = function (req, res, next) { return _getgame(req, res, next, 'team1.players._id team2.players._id'); };
