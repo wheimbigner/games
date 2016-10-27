@@ -28,8 +28,6 @@ class Battleboats extends React.Component {
         return ({ router: this.context.router })
     }
     componentWillMount() {
-        boatApi.getGame(this.props.params.game);
-//        localStorage.debug='*';
         this.socket = io('/battleship/' + this.props.params.game);
         this.socket.on('update', data => {
             store.dispatch(getGameSuccess(data)) // Is this a good idea? I wish all my store calls were consolidated

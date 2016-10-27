@@ -6,10 +6,3 @@ export function getGameSuccess(game) {
         game
     };
 }
-
-export function getShadowBoardSuccess(team, shadowboard) {
-    return {
-        type: types.GET_SHADOWBOARD_SUCCESS,
-        shadowboard
-    }
-}

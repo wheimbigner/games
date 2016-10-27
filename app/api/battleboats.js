@@ -1,8 +1,5 @@
 import axios from 'axios';
 import store from '../store.js';
-import {
-    getGameSuccess, getShadowBoardSuccess
-} from '../actions/battleboats.js';
 
 export function createGame() {
     const api = store.getState().api;
@@ -14,13 +11,6 @@ export function getGames() {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
     return axios.get(api.baseurl + '/battleship', config);    
-}
-
-export function getGame(game) {
-    const api = store.getState().api;
-    const config = { headers: {'x-access-token': api.token}};
-    return axios.get(api.baseurl + '/battleship/' + game, config)
-        .then(response => { store.dispatch(getGameSuccess(response.data.data)); return response; });
 }
 
 export function deleteGame(game) {
@@ -77,8 +67,7 @@ export function setTeamName(game, team, name) {
 export function getShadowBoard(game, team) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
-    return axios.get(api.baseurl + '/battleship/' + game + '/team/' + team + '/shadowboard', config)
-        .then(response => {store.dispatch(getShadowBoardSuccess(team, response.data.board)); return response;})
+    return axios.get(api.baseurl + '/battleship/' + game + '/team/' + team + '/shadowboard', config);
 }
 
 export function setShadowBoard(game, team, board) {

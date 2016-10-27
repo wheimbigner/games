@@ -47,6 +47,32 @@ const getplayer = function (req, res, next) {
     next();
 }
 
+function findAndEmit(socket, id) {
+    // Unless there's a cleaner way... I know we have the doc in hand but doc.populate('blah').exec doesn't work
+    Battleship.findOne({ _id: id }).populate('team1.players._id team2.players._id').exec( (err, game) => {
+        if (err) throw err;
+        const ret = { 
+            creator: game.creator,
+            name: game.name,
+            started: game.started,
+            finished: game.finished,
+            desc: game.desc,
+            team1: {
+                name: game.team1.name,
+                ships: game.team1.ships,
+                board: game.team1.board,
+                players: game.team1.players
+            },
+            team2: {
+                name: game.team2.name,
+                ships: game.team2.ships,
+                board: game.team2.board,
+                players: game.team2.players
+            }
+        };
+        socket.emit('update', ret);
+    })    
+}
 function init(server) {
     var router = express.Router();
 
@@ -57,34 +83,13 @@ function init(server) {
     Battleship.find({}, (err, games) => {
         if (err) throw err;
         games.forEach(game => {
-            io.of('/battleship/' + game._id);		
+            io.of('/battleship/' + game._id).on('connection', function(socket) {
+                findAndEmit(socket, game._id);
+            });
         });
     })
     Battleship.schema.post('save', function(doc) {
-        // Unless there's a cleaner way... I know we have the doc in hand but doc.populate('blah').exec doesn't work
-        Battleship.findOne({ _id: doc._id }).populate('team1.players._id team2.players._id').exec( (err, game) => {
-            if (err) throw err;
-            const ret = { 
-                creator: game.creator,
-                name: game.name,
-                started: game.started,
-                finished: game.finished,
-                desc: game.desc,
-                team1: {
-                    name: game.team1.name,
-                    ships: game.team1.ships,
-                    board: game.team1.board,
-                    players: game.team1.players
-                },
-                team2: {
-                    name: game.team2.name,
-                    ships: game.team2.ships,
-                    board: game.team2.board,
-                    players: game.team2.players
-                }
-            };
-            io.of('/battleship/' + game._id).emit('update', ret);
-        })
+        findAndEmit(io.of('/battleship/' + doc._id), doc._id);
     })
 
     router.use(function (req, res, next) {
@@ -118,7 +123,9 @@ function init(server) {
         var newgame = new Battleship({ creator: req.auth.email });
         newgame.save((err) => {
             if (err) throw err;
-            io.of('/battleship/' + newgame._id);
+            io.of('/battleship/' + newgame._id).on('connection', function(socket) {
+                findAndEmit(socket, newgame._id);
+            });
             res.json({ success: true, id: newgame._id });
         });
     });
