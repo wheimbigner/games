@@ -7,13 +7,6 @@ export function getGameSuccess(game) {
     };
 }
 
-export function getPlayerListSuccess(team, players) {
-    return {
-        type: types.GET_PLAYERLIST_SUCCESS,
-        team, players
-    };
-}
-
 export function getShadowBoardSuccess(team, shadowboard) {
     return {
         type: types.GET_SHADOWBOARD_SUCCESS,

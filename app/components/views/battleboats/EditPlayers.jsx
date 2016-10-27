@@ -55,7 +55,6 @@ class EditPlayers extends React.Component {
 			.then(response => {
 				this.setState({ users: this.mapUsersForAutocomplete(response.data.users) })
 			});
-        boatApi.getPlayerList(this.props.game, this.props.team);
     }
     render() {
         return (

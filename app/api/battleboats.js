@@ -1,9 +1,7 @@
 import axios from 'axios';
 import store from '../store.js';
 import {
-    getGameSuccess,
-    getPlayerListSuccess,
-    getShadowBoardSuccess
+    getGameSuccess, getShadowBoardSuccess
 } from '../actions/battleboats.js';
 
 export function createGame() {
@@ -42,13 +40,6 @@ export function changeShots(game, team, player, direction) {
     const config = { headers: {'x-access-token': api.token}};
     return axios.patch(api.baseurl + '/battleship/' + game + '/team/' + team + '/player/' + player + '/shots/' + direction,
     {}, config);
-}
-
-export function getPlayerList(game, team) {
-    const api = store.getState().api;
-    const config = { headers: {'x-access-token': api.token}};
-    return axios.get(api.baseurl + '/battleship/' + game + '/team/' + team + '/player', config)
-        .then(response => {store.dispatch(getPlayerListSuccess(team, response.data.players)); return response});
 }
 
 // FIXME this should update the store's list of players

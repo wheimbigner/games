@@ -42,15 +42,6 @@ const battleboatReducer = function (state = initialState, action) {
     switch (action.type) {
         case types.GET_GAME_SUCCESS:
             return Object.assign({}, state, action.game);
-        case types.GET_PLAYERLIST_SUCCESS:
-            newState[team] = {
-                board: state[team].board,
-                shadowboard: state[team].shadowboard,
-                players: action.players,
-                ships: state[team].ships,
-                name: state[team].name
-            }
-            return Object.assign({}, state, newState)
         case types.GET_SHADOWBOARD_SUCCESS:
 			var shadowboard = action.shadowboard.map(row => { return row.map(cell => { return (cell ? cell : ''); }) })
             newState[team] = {
