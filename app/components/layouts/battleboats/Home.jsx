@@ -11,7 +11,7 @@ import * as api from '../../../api/api.js';
 
 import io from 'socket.io-client';
 
-import getGameSuccess from '../../../actions/battleboats.js';
+import {getGameSuccess} from '../../../actions/battleboats.js';
 import store from '../../../store.js';
 
 class Battleboats extends React.Component {
