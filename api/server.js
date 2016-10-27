@@ -22,6 +22,43 @@ if(config.get('debug')) {
 }
 mongoose.connect(config.get('database'));
 
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+io.on('connection', function(socket) {
+	socket.emit('status', {connected: 'connected'});
+})
+Battleship.find({}, (err, games) => {
+	games.forEach(game => {
+		io.of('/battleship/' + game._id);		
+	});
+})
+Battleship.schema.post('save', function(doc) {
+	// Unless there's a cleaner way... I know we have the doc in hand but doc.populate('blah').exec doesn't work
+	Battleship.findOne({ _id: doc._id }).populate('team1.players._id team2.players._id').exec( (err, game) => {
+		if (err) throw err;
+		const ret = { 
+			creator: game.creator,
+			name: game.name,
+			started: game.started,
+			finished: game.finished,
+			desc: game.desc,
+			team1: {
+				name: game.team1.name,
+				ships: game.team1.ships,
+				board: game.team1.board,
+				players: game.team1.players
+			},
+			team2: {
+				name: game.team2.name,
+				ships: game.team2.ships,
+				board: game.team2.board,
+				players: game.team2.players
+			}
+		};
+		io.of('/battleship/' + game._id).emit('update', ret);
+	})
+})
+
 router.get('/init', (req, res) => {
 	User.findOne({ _id: config.get('masterUser._id') }, function (err, user) {
 		if (err) throw err;
@@ -232,6 +269,7 @@ router.post('/battleship', requireAdmin, (req, res) => {
 	var newgame = new Battleship({ creator: req.auth.email });
 	newgame.save((err) => {
 		if (err) throw err;
+		io.of('/battleship/' + newgame._id);
 		res.json({ success: true, id: newgame._id });
 	});
 });
@@ -460,4 +498,4 @@ router.route('/battleship/:id/team/:team/name')
 
 app.use('/api', router);
 app.use('/', express.static('src/client/public'))
-app.listen(config.get('port'));
+server.listen(config.get('port'));
