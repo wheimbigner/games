@@ -190,4 +190,4 @@ app.use('/api', router);
 app.use('/api', battleshipRouter);
 
 app.use('/', express.static('src/client/public'))
-server.listen(config.get('port'));
+server.listen(config.get('port'), 'localhost');
