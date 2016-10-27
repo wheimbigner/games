@@ -83,7 +83,7 @@ module.exports = mongoose.model('Battleship', new Schema({
     name: { type: String, default: "Untitled game" },
     started: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
-    desc: { type: String, default: '' },
+    desc: { type: String, default: 'Non-descript description' },
     team1: { 
         type: Team,
         default: {
