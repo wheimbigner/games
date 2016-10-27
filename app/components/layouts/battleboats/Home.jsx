@@ -11,55 +11,74 @@ import * as api from '../../../api/api.js';
 
 import io from 'socket.io-client';
 
-import {getGameSuccess} from '../../../actions/battleboats.js';
-import store from '../../../store.js';
-
 class Battleboats extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { gamename: props.name, cansavename: false, desc: props.desc, cansavedesc: false };
+        this.state = { 
+            cansavename: false, cansavedesc: false,
+            game: {
+                name: '',
+                desc: '',
+                team1: {
+                    name: '',
+                    players: [],
+                    board: Array(10).fill(Array(10).fill(0)),
+                    ships: {
+                        carrier: { slots: 5, wounded: 0 },
+                        battleship: { slots: 4, wounded: 0 },
+                        cruiser: { slots: 3, wounded: 0 },
+                        submarine: { slots: 3, wounded: 0 },
+                        destroyer: { slots: 2, wounded: 0 },
+                    }        
+                },
+                team2: {
+                    name: '',
+                    players: [],
+                    board: Array(10).fill(Array(10).fill(0)),
+                    ships: {
+                        carrier: { slots: 5, wounded: 0 },
+                        battleship: { slots: 4, wounded: 0 },
+                        cruiser: { slots: 3, wounded: 0 },
+                        submarine: { slots: 3, wounded: 0 },
+                        destroyer: { slots: 2, wounded: 0 },
+                    }
+                }
+            }
+        };
         this.onChange_gamename = this.onChange_gamename.bind(this);
         this.saveGamename = this.saveGamename.bind(this);
         this.onChange_desc = this.onChange_desc.bind(this);
         this.saveDesc = this.saveDesc.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
     }
-    getChildContext() {
-        return ({ router: this.context.router })
-    }
     componentWillMount() {
         this.socket = io('/battleship/' + this.props.params.game);
         this.socket.on('update', data => {
-            store.dispatch(getGameSuccess(data)) // Is this a good idea? I wish all my store calls were consolidated
+            this.setState({game: data});
+            api.title(this.state.game.name);
         })
-        api.title(this.props.name);
-    }
-    componentDidMount() {
     }
     componentWillUnmount() {
         this.socket.close();
     }
-    componentWillReceiveProps(newProps) {
-        if ( (newProps.name) && (this.state.gamename === this.props.name) ) {
-            this.setState({gamename: newProps.name});
-        }
-        if ( (newProps.desc) && (this.state.desc === this.props.desc) ) {
-            this.setState({desc: newProps.desc});
-        }
-        if ('name' in newProps && (this.props.name !== newProps.name)) api.title(newProps.name);
-    }
     onChange_gamename(event) {
-        this.setState({gamename: event.target.value, cansavename: true});        
+        this.setState({
+            game: Object.assign({}, this.state.game, {name: event.target.value}),
+            cansavename: true
+        });
     }
     onChange_desc(event) {
-        this.setState({desc: event.target.value, cansavedesc: true});        
+        this.setState({
+            game: Object.assign({}, this.state.game, {desc: event.target.value}),
+            cansavedesc: true
+        });
     }
     saveGamename() {
-        boatApi.setGameName(this.props.params.game, this.state.gamename)
+        boatApi.setGameName(this.props.params.game, this.state.game.name)
             .then( () => { this.setState({cansavename: false}) } )
     }
     saveDesc() {
-        boatApi.setGameDesc(this.props.params.game, this.state.desc)
+        boatApi.setGameDesc(this.props.params.game, this.state.game.desc)
             .then( () => { this.setState({cansavedesc: false}) } )
     }
     deleteGame() {
@@ -76,7 +95,7 @@ class Battleboats extends React.Component {
                             <div style={{textAlign: 'center', flex: '0 0 70%'}}>
                                 <div style={{display: 'flex'}}>
                                     <div style={{flex: '1 1 90%'}}>
-                                        <TextField name="gamename" value={this.state.gamename}
+                                        <TextField name="gamename" value={this.state.game.name}
                                             hintText="Untitled Game"
                                             inputStyle={{textAlign: 'center'}}
                                             fullWidth={true}
@@ -90,7 +109,7 @@ class Battleboats extends React.Component {
                                 </div>
                                 <div style={{display: 'flex'}}>
                                     <div style={{flex: '1 1 90%'}}>
-                                        <TextField name="description" value={this.state.desc}
+                                        <TextField name="description" value={this.state.game.desc}
                                             hintText="Put description/info about the game here"
                                             multiLine={true} rows={2} rowsMax={4}
                                             textareaStyle={{textAlign: 'center'}}
@@ -111,61 +130,27 @@ class Battleboats extends React.Component {
                     </div>
                     :
                     <div>
-                        <p style={{textAlign: 'center', whiteSpace: 'pre-wrap'}}>{this.props.desc}</p>
+                        <p style={{textAlign: 'center', whiteSpace: 'pre-wrap'}}>{this.state.game.desc}</p>
                     </div>
                 }
-                <table>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '50%', verticalAlign: 'top' }}>
-                                <Team team={1} game={this.props.params.game}
-                                    admin={this.props.admin}
-                                    ships={this.props.ships[0]}
-                                    board={this.props.board[0]}
-                                    players={this.props.players[0]}
-                                    name={this.props.teamnames[0]} />
-                            </td>
-                            <td style={{ width: '50%', verticalAlign: 'top' }}>
-                                <Team team={2} game={this.props.params.game} 
-                                    admin={this.props.admin}
-                                    ships={this.props.ships[1]}
-                                    board={this.props.board[1]}
-                                    players={this.props.players[1]}
-                                    name={this.props.teamnames[1]} />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <table><tbody><tr>
+                    <td style={{ width: '50%', verticalAlign: 'top' }}>
+                        <Team team={1} game={this.props.params.game} admin={this.props.admin} {...this.state.game.team1} />
+                    </td>
+                    <td style={{ width: '50%', verticalAlign: 'top' }}>
+                        <Team team={2} game={this.props.params.game} admin={this.props.admin} {...this.state.game.team2} />
+                    </td>
+                </tr></tbody></table>
             </Paper>
         );
     }
 }
 Battleboats.propTypes = {
     params: React.PropTypes.object.isRequired,
-    admin: React.PropTypes.bool.isRequired,
-    ships: React.PropTypes.array.isRequired,
-    board: React.PropTypes.array.isRequired,
-    players: React.PropTypes.array.isRequired,
-    teamnames: React.PropTypes.array.isRequired,
-    name: React.PropTypes.string.isRequired,
-    desc: React.PropTypes.string
+    admin: React.PropTypes.bool.isRequired
 }
 Battleboats.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
-Battleboats.childContextTypes = {
-    router: React.PropTypes.object
-}
 
-const mapStateToProps = function (store) {
-    return {
-        ships: [store.battleboatState.team1.ships, store.battleboatState.team2.ships],
-        board: [store.battleboatState.team1.board, store.battleboatState.team2.board],
-        players: [store.battleboatState.team1.players, store.battleboatState.team2.players],
-        teamnames: [store.battleboatState.team1.name, store.battleboatState.team2.name],
-        name: store.battleboatState.name,
-        desc: store.battleboatState.desc,
-        admin: store.api.admin
-    };
-};
-export default connect(mapStateToProps)(Battleboats);
+export default connect(function(store){return {admin:store.api.admin}})(Battleboats);

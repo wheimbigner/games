@@ -32,14 +32,12 @@ export function changeShots(game, team, player, direction) {
     {}, config);
 }
 
-// FIXME this should update the store's list of players
 export function addPlayer(game, team, player) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
     return axios.post(api.baseurl + '/battleship/' + game + '/team/' + team + '/player/' + player, {}, config)
 }
 
-// FIXME this should update the store's list of players
 export function deletePlayer(game, team, player) {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};
