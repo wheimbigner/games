@@ -11,7 +11,6 @@ import EditUserForm  from './components/layouts/Users/Edit.jsx';
 import ResetPasswordForm  from './components/layouts/Users/Reset.jsx';
 import GameListForm  from './components/layouts/Games.jsx';
 import Battleboats   from './components/layouts/battleboats/Home.jsx';
-import ManagePlayers from './components/layouts/battleboats/EditPlayers.jsx';
 
 export default 	(
     <Router history={hashHistory}>
@@ -22,7 +21,6 @@ export default 	(
             <Route path="/reset" component={ResetPasswordForm} />
             <Route path="/games" component={GameListForm} />
             <Route path="/games/:game" component={Battleboats} />
-            <Route path="/games/:game/team/:team/players" component={ManagePlayers} />
         </Route>
     </Router>
 );

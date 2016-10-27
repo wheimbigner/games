@@ -20,7 +20,6 @@ class EditBoard extends React.Component {
 				val = '';
 			board[event.target.dataset.y][event.target.dataset.x] = val;
 			this.setState({board: board});
-			// We should call a callback function here, with this.props.x, this.props.y, this.state.value
 		}
 		this.save = () => {
 			const board = this.state.board.map(row => { return row.map(cell => { return (cell ? cell : 0); }) })

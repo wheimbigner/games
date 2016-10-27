@@ -1,21 +1,22 @@
 import React from 'react';
 
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
 import Ship from './ship.jsx';
 import Grid from './grid.jsx';
-import EditBoard from './EditBoard.jsx'
 import PlayerList from './playerlist.jsx';
+
+import EditBoard from './EditBoard.jsx'
+import EditPlayers from './EditPlayers.jsx';
 
 import * as boatApi from '../../../api/battleboats.js';
 
 class Team extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { name: props.name, cansave: false, editBoard: false };
+        this.state = { name: props.name, cansave: false, editBoard: false, editPlayers: false };
         this.onChange_name = this.onChange_name.bind(this);
         this.saveName = this.saveName.bind(this);
     }
@@ -66,11 +67,13 @@ class Team extends React.Component {
                     </td>
                 </tr></tbody></table>
                 <Paper style={{ padding: 10, margin: 10 }} zDepth={3}>
-                    {this.props.admin ? (
-                        <RaisedButton primary={true} label="Edit Player List" onClick={this.props.nav} />
-                    ) : null}
-                    <PlayerList players={this.props.players} admin={this.props.admin}
-                        game={this.props.game} team={this.props.team} />
+                    {this.state.editPlayers ? (
+                        <EditPlayers game={this.props.game} team={this.props.team} players={this.props.players}
+                            close={() => {this.setState({editPlayers: false})}} /> 
+                    ) : (
+                        <PlayerList players={this.props.players} admin={this.props.admin}
+                            game={this.props.game} team={this.props.team} edit={() => {this.setState({editPlayers:true})}} />
+                    )}
                 </Paper>
             </Paper>
         )
@@ -80,7 +83,6 @@ class Team extends React.Component {
 Team.propTypes = {
     ships: React.PropTypes.object.isRequired,
     admin: React.PropTypes.bool,
-    nav: React.PropTypes.func.isRequired,
     game: React.PropTypes.string.isRequired,
     team: React.PropTypes.number.isRequired,
     board: React.PropTypes.array.isRequired,

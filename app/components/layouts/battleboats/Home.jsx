@@ -9,15 +9,15 @@ import Team from '../../views/battleboats/team.jsx';
 import * as boatApi from '../../../api/battleboats.js';
 import * as api from '../../../api/api.js';
 
+import io from 'socket.io-client';
+
+import getGameSuccess from '../../../actions/battleboats.js';
+import store from '../../../store.js';
 
 class Battleboats extends React.Component {
     constructor(props) {
         super(props);
         this.state = { gamename: props.name, cansavename: false, desc: props.desc, cansavedesc: false };
-        this.nav = [ 
-                () => { this.context.router.push('/games/' + this.props.params.game + '/team/1/players') },
-                () => { this.context.router.push('/games/' + this.props.params.game + '/team/2/players') }
-        ]
         this.onChange_gamename = this.onChange_gamename.bind(this);
         this.saveGamename = this.saveGamename.bind(this);
         this.onChange_desc = this.onChange_desc.bind(this);
@@ -29,13 +29,17 @@ class Battleboats extends React.Component {
     }
     componentWillMount() {
         boatApi.getGame(this.props.params.game);
+//        localStorage.debug='*';
+        this.socket = io('/battleship/' + this.props.params.game);
+        this.socket.on('update', data => {
+            store.dispatch(getGameSuccess(data)) // Is this a good idea? I wish all my store calls were consolidated
+        })
         api.title(this.props.name);
     }
     componentDidMount() {
-        this.timer = setInterval(  () => { boatApi.getGame(this.props.params.game); },  10000  );
     }
     componentWillUnmount() {
-        clearInterval(this.timer);
+        this.socket.close();
     }
     componentWillReceiveProps(newProps) {
         if ( (newProps.name) && (this.state.gamename === this.props.name) ) {
@@ -121,8 +125,7 @@ class Battleboats extends React.Component {
                                     ships={this.props.ships[0]}
                                     board={this.props.board[0]}
                                     players={this.props.players[0]}
-                                    name={this.props.teamnames[0]}
-                                    nav={this.nav[0]} />
+                                    name={this.props.teamnames[0]} />
                             </td>
                             <td style={{ width: '50%', verticalAlign: 'top' }}>
                                 <Team team={2} game={this.props.params.game} 
@@ -130,8 +133,7 @@ class Battleboats extends React.Component {
                                     ships={this.props.ships[1]}
                                     board={this.props.board[1]}
                                     players={this.props.players[1]}
-                                    name={this.props.teamnames[1]}
-                                    nav={this.nav[1]} />
+                                    name={this.props.teamnames[1]} />
                             </td>
                         </tr>
                     </tbody>
