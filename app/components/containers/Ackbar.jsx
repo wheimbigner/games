@@ -16,9 +16,6 @@ class Ackbar extends React.Component {
             this.setState({open: true, message: newprops.message});
     }
     render() {
-        if (this.state.open) {
-            console.log('render open ackbar!');
-        }
         return (
             <Snackbar
                 open={this.state.open}
