@@ -38,9 +38,9 @@ class UserListForm extends React.Component {
                     <TableHeaderColumn>email</TableHeaderColumn>
                     <TableHeaderColumn>First Name</TableHeaderColumn>
                     <TableHeaderColumn>Last Name</TableHeaderColumn>
-                    <TableHeaderColumn>Part-time?</TableHeaderColumn>
+{ /*                    <TableHeaderColumn>Part-time?</TableHeaderColumn> */ }
                     <TableHeaderColumn>Admin</TableHeaderColumn>
-                    <TableHeaderColumn>Supervisor</TableHeaderColumn>
+{ /*                    <TableHeaderColumn>Supervisor</TableHeaderColumn> */ }
                     <TableHeaderColumn>Created</TableHeaderColumn>
                     <TableHeaderColumn>Updated</TableHeaderColumn>
                 </TableRow>
@@ -51,9 +51,9 @@ class UserListForm extends React.Component {
                     <TableRowColumn>{user._id}</TableRowColumn>
                     <TableRowColumn>{user.firstName}</TableRowColumn>
                     <TableRowColumn>{user.lastName}</TableRowColumn>
-                    <TableRowColumn>{(user.parttime ? 'Yes' : 'No')}</TableRowColumn>
+{ /*                    <TableRowColumn>{(user.parttime ? 'Yes' : 'No')}</TableRowColumn> */ }
                     <TableRowColumn>{(user.admin ? 'Yes' : 'No')}</TableRowColumn>
-                    <TableRowColumn>{user.supervisor}</TableRowColumn>
+{ /*                    <TableRowColumn>{user.supervisor}</TableRowColumn> */ }
                     <TableRowColumn>{user.createdAt}</TableRowColumn>
                     <TableRowColumn>{user.updatedAt}</TableRowColumn>
                 </TableRow>

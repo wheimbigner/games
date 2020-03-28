@@ -72,8 +72,8 @@ class EditUserForm extends React.Component {
 					this.setState({
 						firstName: response.data.user.firstName,
 						lastName: response.data.user.lastName,
-						parttime: response.data.user.parttime,
-						supervisor: response.data.user.supervisor,
+//						parttime: response.data.user.parttime,
+//						supervisor: response.data.user.supervisor,
 						admin: response.data.user.admin
 					})
 				})
@@ -99,12 +99,12 @@ class EditUserForm extends React.Component {
 				<TextField name="lastName"
 					floatingLabelText="Last Name" hintText="Doe"
 					onChange={this.onChange} value={this.state.lastName} /><br />
-				<Checkbox label="Part-time" name="parttime" onCheck={this.onCheck} checked={this.state.parttime} />
+{ /*				<Checkbox label="Part-time" name="parttime" onCheck={this.onCheck} checked={this.state.parttime} />
 				<AutoComplete floatingLabelText="Supervisor" hintText="type to search" dataSource={this.state.sups}
 					filter={AutoComplete.fuzzyFilter} maxSearchResults={10} openOnFocus={false}
 					fullWidth={true} searchText={this.state.supervisor}
 					onUpdateInput={input => { this.setState({ supervisor: input}) }}
-					onNewRequest={sup => { this.setState({ supervisor: (sup.value ? sup.value : sup) }); } } />
+				onNewRequest={sup => { this.setState({ supervisor: (sup.value ? sup.value : sup) }); } } /> */ }
 				{this.props.admin ? (
 					<Checkbox label="Administrator" name="admin" onCheck={this.onCheck} checked={this.state.admin} />
 				) : (<br />)}

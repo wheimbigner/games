@@ -75,8 +75,8 @@ class EditPlayers extends React.Component {
                             <TableRow>
                                 <TableHeaderColumn>Name</TableHeaderColumn>
                                 <TableHeaderColumn>email</TableHeaderColumn>
-                                <TableHeaderColumn>Part-time</TableHeaderColumn>
-                                <TableHeaderColumn>Supervisor</TableHeaderColumn>
+{ /*                                <TableHeaderColumn>Part-time</TableHeaderColumn>
+                                <TableHeaderColumn>Supervisor</TableHeaderColumn> */ }
                             </TableRow>
                         </TableHeader>
                         <TableBody deselectOnClickaway={false}>
@@ -84,8 +84,8 @@ class EditPlayers extends React.Component {
                             <TableRow hoverable={false} key={index}>
                                 <TableRowColumn>{player._id.firstName + ' ' + player._id.lastName}</TableRowColumn>
                                 <TableRowColumn>{player._id._id}</TableRowColumn>
-                                <TableRowColumn>{(player._id.parttime ? 'Yes' : 'No')}</TableRowColumn>
-                                <TableRowColumn>{player._id.supervisor}</TableRowColumn>
+{ /*                                <TableRowColumn>{(player._id.parttime ? 'Yes' : 'No')}</TableRowColumn>
+                                <TableRowColumn>{player._id.supervisor}</TableRowColumn> */ }
                             </TableRow>
                         )})}
                         </TableBody>
