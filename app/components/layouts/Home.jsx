@@ -34,17 +34,17 @@ class Home extends React.Component {
 								<div style={{flex: true}}>{this.props.email}&nbsp;&nbsp;</div>
 							</div>
 						)}
-						onLeftIconButtonTouchTap={this.toggleDrawer}
+						onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)}
 						iconElementRight={(<RaisedButton label='About / Feedback' onClick={() => {this.refs.about.open()}} />)}
 					/>
 					{this.props.children}
 					<Drawer open={this.state.drawerOpen} docked={false} onRequestChange={(open) => this.setState({ drawerOpen: open }) }>
-						<Link to="/games"><MenuItem onTouchTap={() => { this.closeDrawer(); } }>Battleship games</MenuItem></Link>
-						<Link to="/users"><MenuItem onTouchTap={() => { this.closeDrawer(); } }>Users</MenuItem></Link>
+						<Link to="/games"><MenuItem onClick={() => { this.closeDrawer(); } }>Battleship games</MenuItem></Link>
+						<Link to="/users"><MenuItem onClick={() => { this.closeDrawer(); } }>Users</MenuItem></Link>
 						<Link to={'/users/' +  (this.state.auth.email ? this.state.auth.email : 'new')}>
-							<MenuItem onTouchTap={() => { this.closeDrawer(); } }>My Profile</MenuItem>
+							<MenuItem onClick={() => { this.closeDrawer(); } }>My Profile</MenuItem>
 						</Link>
-						<Link to="/"><MenuItem onTouchTap={() => { api.logout(); this.closeDrawer(); } }>Log Out</MenuItem></Link>
+						<Link to="/"><MenuItem onClick={() => { api.logout(); this.closeDrawer(); } }>Log Out</MenuItem></Link>
 					</Drawer>
 					<About ref="about" />
 					<Ackbar />

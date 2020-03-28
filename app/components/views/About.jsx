@@ -21,8 +21,8 @@ export default class About extends React.Component {
     }
 	render() {
         const actions = [
-            (<FlatButton label="view license" secondary={true} onTouchTap={() => {this.close(); this.refs.license.open()}} />),
-            (<FlatButton label="close" primary={true} keyboardFocused={true} onTouchTap={this.close} />)
+            (<FlatButton label="view license" secondary={true} onClick={() => {this.close(); this.refs.license.open()}} />),
+            (<FlatButton label="close" primary={true} keyboardFocused={true} onClick={this.close} />)
         ];
 		return (<div>
             <License ref="license" />
@@ -31,13 +31,15 @@ export default class About extends React.Component {
                 open={this.state.open} onRequestClose={this.close}
                 title='About heisenberg.games'>
                 <p>
-                    heisenberg.games - Copyright &copy; 2016 William Heimbigner.&nbsp;
+                    heisenberg.games - Copyright &copy; 2020 William Heimbigner.&nbsp;
                     <a target="_blank" href="https://github.com/wheimbigner/games">Source code</a> 
                 </p>
-                <p>Just because you <i>can</i> play a battleship game in Excel, doesn't mean you <i>should</i>.</p>
                 <p>
-                    Questions? Comments? Concerns? Accolades, applause, cheers, exaltations, hurrahs, kudos, raves, thanks? 
-                    Contact William Heimbigner &lt;<a href="mailto:william@heimbigner.email">william@heimbigner.email</a>&gt;
+                    Dedicated to every manager/supervisor/SCRUM master who I've caused to lose their sanity.
+                </p>
+                <p>
+                    Questions? Comments? Concerns?
+                    Contact William Heimbigner &lt;<a href="mailto:william.heimbigner@gmail.com">william.heimbigner@gmail.com</a>&gt;
                 </p>
                 <p>
                     This game was developed entirely on personal free time, is "free as in freedom", and is licensed under 

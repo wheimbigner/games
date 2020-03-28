@@ -1,5 +1,5 @@
-var Battleship = require('./models/battleship');
-
+var BattleshipSchema = require('./models/battleship');
+var Battleship;
 var express = require('express');
 var mongoose = require('mongoose');
 var config = require('config');
@@ -51,7 +51,7 @@ function findAndEmit(socket, id) {
     // Unless there's a cleaner way... I know we have the doc in hand but doc.populate('blah').exec doesn't work
     Battleship.findOne({ _id: id }).populate('team1.players._id team2.players._id').exec( (err, game) => {
         if (err) throw err;
-        const ret = { 
+        const ret = {
             creator: game.creator,
             name: game.name,
             started: game.started,
@@ -71,8 +71,9 @@ function findAndEmit(socket, id) {
             }
         };
         socket.emit('update', ret);
-    })    
+    })
 }
+
 function init(server) {
     var router = express.Router();
 
@@ -80,6 +81,11 @@ function init(server) {
     io.on('connection', function(socket) {
         socket.emit('status', {connected: 'connected'});
     })
+    BattleshipSchema.post('save', function(doc) {
+        findAndEmit(io.of('/battleship/' + doc._id), doc._id);
+    })
+    Battleship = mongoose.model('Battleship', BattleshipSchema);
+
     Battleship.find({}, (err, games) => {
         if (err) throw err;
         games.forEach(game => {
@@ -87,9 +93,6 @@ function init(server) {
                 findAndEmit(socket, game._id);
             });
         });
-    })
-    Battleship.schema.post('save', function(doc) {
-        findAndEmit(io.of('/battleship/' + doc._id), doc._id);
     })
 
     router.use(function (req, res, next) {
@@ -116,7 +119,7 @@ function init(server) {
         Battleship.find({}, 'creator name started finished createdAt updatedAt', (err, games) => {
             if (err) throw err;
             res.json({ success: true, games: games });
-        });	
+        });
     });
 
     router.post('/battleship', requireAdmin, (req, res) => {
@@ -132,7 +135,7 @@ function init(server) {
 
     router.route('/battleship/:id')
         .get(getpropgame, (req, res) => {
-            const ret = { 
+            const ret = {
                 creator: req.game.creator,
                 name: req.game.name,
                 started: req.game.started,
@@ -283,7 +286,7 @@ function init(server) {
             req.game.markModified('team1.board');
             req.game.markModified('team2.board');
             req.game.save(err => {
-                if (err) throw err; 
+                if (err) throw err;
                 res.json({ success: true, hit: req.gameboard.board[y][x], ship: shadowcell });
             })
         }
@@ -307,7 +310,7 @@ function init(server) {
                     if (board[y][x] === i) foundship = board[y][x];
                     for (let c = (foundship > 2) ? foundship - 1 : foundship; (c >= 0) && foundship; c--) {
                         if ((board[y][x+c] !== foundship) && ((board[y+c]) && (board[y+c][x] !== foundship))) return false;
-                    }				
+                    }
                 }
             }
         }
@@ -322,7 +325,7 @@ function init(server) {
         .put( (req, res) => {
             if (req.game.started) {
                 return res.json({ success: false, message: "Can't update the shadowboard for a game that's in progress!"});
-            } 
+            }
             for (let y = 0; y < 10; y++) {
                 for (let x = 0; x < 10; x++) {
                     req.body.board[y][x] = parseInt(req.body.board[y][x], 10);

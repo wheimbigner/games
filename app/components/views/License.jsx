@@ -19,7 +19,7 @@ export default class License extends React.Component {
         this.setState({open: false});
     }
 	render() {
-        const CloseButton = <FlatButton label="close" primary={true} keyboardFocused={true} onTouchTap={this.close} />
+        const CloseButton = <FlatButton label="close" primary={true} keyboardFocused={true} onClick={this.close} />
 		return (
             <Dialog actions={[CloseButton]} modal={false} autoScrollBodyContent={true} 
                 open={this.state.open} onRequestClose={this.close}

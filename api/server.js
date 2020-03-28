@@ -69,8 +69,8 @@ router.post('/authenticate', (req, res) => {
 
 /**
  * @api {get} /users/:user Initiate request to create a user
- * 
- * @apiParam {String} user Email address of the user to create. 
+ *
+ * @apiParam {String} user Email address of the user to create.
  */
 router.post('/users/:user', (req, res) => {
 	User.findOne({ _id: req.params.user }, (err, user) => {
@@ -89,7 +89,7 @@ router.post('/users/:user', (req, res) => {
 			if (err2) throw err2;
 			res.json({
 				success: true, message: "User created!",
-				token: jwt.sign({ email: req.params.user, admin: false }, config.get('jwtSecret'), 
+				token: jwt.sign({ email: req.params.user, admin: false }, config.get('jwtSecret'),
 					{ algorithm: 'HS512', expiresIn: '3d' }
 				)
 			});

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
- 
+
 var TeamPlayer = new Schema({
     _id: {
         type: String,
@@ -74,7 +74,7 @@ var Team = new Schema({
     players: [TeamPlayer]
 });
 
-module.exports = mongoose.model('Battleship', new Schema({
+module.exports = new Schema({
 	creator: {
         type: String,
         ref: 'User',
@@ -84,22 +84,22 @@ module.exports = mongoose.model('Battleship', new Schema({
     started: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
     desc: { type: String, default: 'Non-descript description' },
-    team1: { 
+    team1: {
         type: Team,
         default: {
             board: Array(10).fill(Array(10).fill(0)),
             shadowboard: Array(10).fill(Array(10).fill(0)),
-            players: []            
-        } 
+            players: []
+        }
     },
-    team2: { 
+    team2: {
         type: Team,
         default: {
             board: Array(10).fill(Array(10).fill(0)),
             shadowboard: Array(10).fill(Array(10).fill(0)),
-            players: []            
-        } 
+            players: []
+        }
     }
 },{
     timestamps: true
-}));
+});
