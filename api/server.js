@@ -19,7 +19,7 @@ if(config.get('debug')) {
 		console.log.debug('query executed:', coll, method, query, doc);
 	});
 }
-mongoose.connect(config.get('database'));
+mongoose.connect(config.get('database'), {useMongoClient: true});
 
 var server = require('http').createServer(app);
 var battleshipRouter = require('./battleship.js')(server);
