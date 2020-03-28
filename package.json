@@ -34,7 +34,7 @@
     "lodash": "^4.16.4",
     "mailgun-js": "^0.7.12",
     "material-ui": "^0.16.0",
-    "mongoose": "^4.6.3",
+    "mongoose": "^5.9.6",
     "mongoose-hidden": "^0.6.4",
     "morgan": "^1.7.0",
     "react": "^15.3.2",
