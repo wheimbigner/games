@@ -41,3 +41,5 @@ jspm_packages
 config.js
 .vscode
 dist
+config/production.json
+config/development.json
