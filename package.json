@@ -23,7 +23,7 @@
     "jscs": "jscs ."
   },
   "dependencies": {
-    "axios": "^0.15.0",
+    "axios": "^0.19.2",
     "babel-cli": "^6.4.0",
     "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
