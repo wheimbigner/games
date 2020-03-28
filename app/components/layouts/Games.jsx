@@ -38,8 +38,8 @@ class GameListForm extends React.Component {
 						<TableRow selectable={false}>
 							<TableHeaderColumn>Name</TableHeaderColumn>
 							<TableHeaderColumn>Owner</TableHeaderColumn>
-							<TableHeaderColumn>Started?</TableHeaderColumn>
-							<TableHeaderColumn>Finished?</TableHeaderColumn>
+{ /*							<TableHeaderColumn>Started?</TableHeaderColumn>
+							<TableHeaderColumn>Finished?</TableHeaderColumn> */ }
 							<TableHeaderColumn>createdAt</TableHeaderColumn>
 							<TableHeaderColumn>updatedAt</TableHeaderColumn>
 						</TableRow>
@@ -49,8 +49,8 @@ class GameListForm extends React.Component {
 							<TableRow key={index} selectable={true} hoverable={true}>
 								<TableRowColumn>{game.name}</TableRowColumn>
 								<TableRowColumn>{game.creator}</TableRowColumn>
-								<TableRowColumn>{(game.started ? 'Yes' : 'No') }</TableRowColumn>
-								<TableRowColumn>{(game.finished ? 'Yes' : 'No') }</TableRowColumn>
+{ /*								<TableRowColumn>{(game.started ? 'Yes' : 'No') }</TableRowColumn>
+								<TableRowColumn>{(game.finished ? 'Yes' : 'No') }</TableRowColumn> */ }
 								<TableRowColumn>{game.createdAt}</TableRowColumn>
 								<TableRowColumn>{game.updatedAt}</TableRowColumn>
 							</TableRow>
