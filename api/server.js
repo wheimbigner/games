@@ -19,7 +19,7 @@ if(config.get('debug')) {
 		console.log.debug('query executed:', coll, method, query, doc);
 	});
 }
-mongoose.connect(config.get('database'), {useMongoClient: true});
+mongoose.connect(config.get('database'), {useNewUrlParser: true, useUnifiedTopology: true});
 
 var server = require('http').createServer(app);
 var battleshipRouter = require('./battleship.js')(server);
@@ -118,7 +118,7 @@ router.post('/users/:user/reset', (req, res) => {
 		mg.messages().send({
 			from: config.get('mailgun.sender'),
 			to: req.params.user,
-			subject: "password reset request",
+			subject: "Password Reset for heisenberg.games",
 			text: "You asked for a password reset.\n" +
 			"Your password reset url is:\n" +
 			config.get('url') + '#/reset?token=' + token + "\n" +
