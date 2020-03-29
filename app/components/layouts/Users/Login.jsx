@@ -24,7 +24,7 @@ class SigninForm extends React.Component {
 			api.auth(this.state.email, this.state.password)
 				.then(response => {
 					if (response.data.success) {
-						Cookies.set('token', response.data.token);
+						Cookies.set('token', response.data.token, { expires: 7 });
 						this.context.router.push('/games');
 					} else {
 						this.setState({ message: response.data.message });

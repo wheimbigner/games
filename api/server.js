@@ -60,7 +60,7 @@ router.post('/authenticate', (req, res) => {
 				return res.json({
 					success: true, message: "Auth is good",
 					token: jwt.sign({ email: req.body.email, admin: user.admin }, config.get('jwtSecret'),
-					{ algorithm: 'HS512', expiresIn: '3d' })
+					{ algorithm: 'HS512', expiresIn: '7d' })
 				});
 			res.status(403).json({ success: false, message: "Password's not good" });
 		});
@@ -90,7 +90,7 @@ router.post('/users/:user', (req, res) => {
 			res.json({
 				success: true, message: "User created!",
 				token: jwt.sign({ email: req.params.user, admin: false }, config.get('jwtSecret'),
-					{ algorithm: 'HS512', expiresIn: '3d' }
+					{ algorithm: 'HS512', expiresIn: '7d' }
 				)
 			});
 		});
