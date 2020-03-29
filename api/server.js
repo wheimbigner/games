@@ -109,24 +109,28 @@ router.get('/users', (req, res) => {
 router.post('/users/:user/reset', (req, res) => {
 	User.findOne({ _id: req.params.user }, (err, user) => {
 		if (err) throw err;
-		if (!(user)) {
-			res.status(404).json({ success: false, message: "User not found" });
-		} else {
-			const token = jwt.sign({ email: req.params.user }, config.get('jwtSecret'),
-				{ algorithm: 'HS512', expiresIn: '15m' });
-			mg.messages().send({
-				from: config.get('mailgun.sender'),
-				to: req.params.user,
-				subject: "password reset request",
-				text: "You asked for a password reset.\n" +
-				"Your password reset url is:\n" +
-				config.get('url') + '#/reset?token=' + token + "\n" +
-				"This link is good for unlimited uses for the next 15 minutes."
-			}, (err, body) => {
-				if (err) throw err;
-				return res.json({ success: true, message: "Reset token sent" });
+		if (!(user))
+			return res.status(404).json({ success: false, message: "User not found" });
+		if (user.lastReset > (Date.now() - (1000*60*45))) // force 45 minutes between resets
+			return res.status(403).json({ success: false, message: "A reset link was already sent recently"});
+		const token = jwt.sign({ email: req.params.user }, config.get('jwtSecret'),
+			{ algorithm: 'HS512', expiresIn: '60m' });
+		mg.messages().send({
+			from: config.get('mailgun.sender'),
+			to: req.params.user,
+			subject: "password reset request",
+			text: "You asked for a password reset.\n" +
+			"Your password reset url is:\n" +
+			config.get('url') + '#/reset?token=' + token + "\n" +
+			"This link is only good for 1 hour after being requested."
+		}, (err, body) => {
+			if (err) throw err;
+			user.lastReset = Date.now();
+			user.save(err2 => {
+				if (err2) throw err2;
+				return res.json({ success: true, message: "Reset email sent" });
 			});
-		}
+		});
 	})
 })
 

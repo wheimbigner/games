@@ -44,8 +44,11 @@ class SigninForm extends React.Component {
 				if (response.data.success) {
 					this.setState({ message: 'Password reset sent, check your junk folder' });
 				} else {
-					this.setState({ message: 'Something went wrong trying to send the password reset' });
+					this.setState({ message: 'Something went catastrophically wrong' });
 				}
+			})
+			.catch(error => {
+				this.setState({ message: error.response.data.message });
 			});
 	}
 	componentWillMount() {

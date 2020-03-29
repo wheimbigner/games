@@ -16,6 +16,7 @@ var UserSchema = new Schema(
 		parttime: { type: Boolean, default: false },
 		admin: { type: Boolean, default: false },
 		lastlogin: Date,
+		lastReset: { type: Date, default: 0 },
 	},
 	{
 		timestamps: true
