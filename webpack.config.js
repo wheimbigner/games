@@ -3,11 +3,12 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var StatsPlugin = require('stats-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   devtool: 'eval-source-map',
   entry: [
-//    'webpack-hot-middleware/client?reload=true',
     path.join(__dirname, 'app/index.jsx')
   ],
   output: {
@@ -21,28 +22,39 @@ module.exports = {
       inject: 'body',
       filename: 'index.html'
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-//    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new StatsPlugin('webpack.stats.json', {
+      source: true,
+      modules: true
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
     })
   ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel',
-      query: {
-//      "presets": ["react", "es2015", "stage-0", "react-hmre"]        
-        "presets": ["es2015", "stage-0", "react"]
+      loader: 'babel-loader',
+      options: {
+//      "presets": ["react", "es2015", "stage-0", "react-hmre"]
+//      "presets": ["es2015", "stage-0", "react"]
+        "presets": [
+          [ "@babel/preset-env",
+            {
+              "targets": {
+                "chrome": "80",
+                "firefox": "70"
+              }
+            }
+          ], "@babel/preset-react"
+        ]
       }
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, {
       test: /\.css$/,
-      loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+      use: ['style-loader', 'css-loader']
     }]
   }
 };

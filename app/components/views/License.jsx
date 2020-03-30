@@ -4,14 +4,12 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 export default class License extends React.Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
-	}
-    state = {
-        open: false
-    };
+        this.state = {open: false};
+    }
     open() {
         this.setState({open: true});
     }

@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import router from './router.jsx';
 import store from './store.js';
 
-import styles from './index.css';
+import './index.css';
 
 ReactDOM.render(
 	<Provider store={store}>{router}</Provider>, document.getElementById('root'));
