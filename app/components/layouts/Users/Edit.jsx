@@ -109,7 +109,7 @@ class EditUserForm extends React.Component {
 					<Checkbox label="Administrator" name="admin" onCheck={this.onCheck} checked={this.state.admin} />
 				) : (<br />)}
 				<TextField hintText="" floatingLabelText="Password" type="password" name="password" onChange={this.onChange} /><br />
-				<p>IMPORTANT: This site is privately owned and operated. Do <b>NOT</b> use an important password here. If you need a suggestion, use "1234".</p>
+				<p>There are no password requirements - don't use an important password here.</p>
 				<RaisedButton label="Save" primary={true} onClick={this.onClick_submit} />
 				<span style={{ color: this.state.messageColor, fontWeight: 'bold', marginLeft: 10 }}>{this.state.message}</span>
 			</div>

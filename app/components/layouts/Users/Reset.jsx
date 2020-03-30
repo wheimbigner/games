@@ -35,6 +35,7 @@ class ResetPasswordForm extends React.Component {
 			<div>
 				<TextField name="email"	floatingLabelText="Email address" value={(this.state.email)} disabled={true} /><br />
 				<TextField floatingLabelText="Password" type="password" name="password" onChange={this.onChange} /><br />
+				<p>There are no password requirements - don't use an important password here.</p>
 				<RaisedButton label="Save" primary={true} onClick={this.onClick_submit} />
 				<span style={{ color: 'red', fontWeight: 'bold', marginLeft: 10 }}>{this.state.message}</span>
 			</div>
