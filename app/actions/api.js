@@ -1,9 +1,10 @@
 import * as types from '../actions/action-types';
 
-export function authSuccess(token) {
+export function authSuccess(token, admin) {
     return {
         type: types.AUTH_SUCCESS,
-        token
+        token,
+        admin
     };
 }
 export function _logout() {

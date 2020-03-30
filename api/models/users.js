@@ -10,6 +10,7 @@ var UserSchema = new Schema(
 	{
 		_id: String,
 		password: { type: String, default: '' },
+		passwordChanged: { type: Date, default: 0 },
 		firstName: String,
 		lastName: String,
 		supervisor: String,
@@ -30,6 +31,7 @@ UserSchema.pre('save', function (next) {
 		bcrypt.hash(user.password, salt, (err, hash) => {
 			if (err) return next(err);
 			user.password = hash;
+			user.passwordChanged = Date.now();
 			next();
 		})
 	})

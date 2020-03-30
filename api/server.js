@@ -59,8 +59,9 @@ router.post('/authenticate', (req, res) => {
 			if (ismatch)
 				return res.json({
 					success: true, message: "Auth is good",
-					token: jwt.sign({ email: req.body.email, admin: user.admin }, config.get('jwtSecret'),
-					{ algorithm: 'HS512', expiresIn: '7d' })
+					token: jwt.sign({ email: req.body.email }, config.get('jwtSecret'),
+					{ algorithm: 'HS512', expiresIn: '30d' }),
+					admin: user.admin
 				});
 			res.status(403).json({ success: false, message: "Password's not good" });
 		});
@@ -89,9 +90,12 @@ router.post('/users/:user', (req, res) => {
 			if (err2) throw err2;
 			res.json({
 				success: true, message: "User created!",
-				token: jwt.sign({ email: req.params.user, admin: false }, config.get('jwtSecret'),
-					{ algorithm: 'HS512', expiresIn: '7d' }
-				)
+				token: jwt.sign(
+					{ email: req.params.user },
+					config.get('jwtSecret'),
+					{ algorithm: 'HS512', expiresIn: '30d' }
+				),
+				admin: false
 			});
 		});
 	})
@@ -140,7 +144,16 @@ router.use(function (req, res, next) {
 	if (token) return jwt.verify(token, config.get('jwtSecret'), (err, decoded) => {
 		if (err) return res.status(401).json({ success: false, message: 'Bad auth.' });
 		req.auth = decoded;
-		return next();
+		if (!req.auth.email) return res.status(401).json({ success: false, message: 'Auth first.' });
+		User.findOne( { _id: req.auth.email }, (err, user) => {
+			if (err) throw err;
+			if (!user) return res.status(404).json({success: false, message: "User not found"});
+			if (user.passwordChanged - 30000 > (req.auth.iat * 1000)) {
+				return res.status(401).json({ success: false, message: 'Authorization expired' });
+			}
+			req.auth.admin = user.admin;
+			return next();
+		});
 	});
 	return res.status(401).json({ success: false, message: 'Auth first.' });
 });

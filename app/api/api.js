@@ -19,7 +19,7 @@ export function auth(email, password) {
     const api = store.getState().api;
     return axios.post(api.baseurl + '/authenticate', {email, password})
         .then(response => {
-            store.dispatch(authSuccess(response.data.token));
+            store.dispatch(authSuccess(response.data.token, response.data.admin));
             return response;
         });
 }
@@ -51,7 +51,7 @@ export function addUser(user, data) {
     return axios.post(api.baseurl + '/users/' + user, data, config)
         .then(response => {
             if (!store.getState().api.token)
-                store.dispatch(authSuccess(response.data.token));
+                store.dispatch(authSuccess(response.data.token, response.data.admin));
             return response;
         });
 }

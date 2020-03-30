@@ -1,4 +1,6 @@
 var BattleshipSchema = require('./models/battleship');
+var User = require('./models/users');
+
 var Battleship;
 var express = require('express');
 var mongoose = require('mongoose');
@@ -110,7 +112,16 @@ function init(server) {
         if (token) return jwt.verify(token, config.get('jwtSecret'), (err, decoded) => {
             if (err) return res.status(401).json({ success: false, message: 'Bad auth.' });
             req.auth = decoded;
-            return next();
+            if (!req.auth.email) return res.status(401).json({ success: false, message: 'Auth first.' });
+            User.findOne( { _id: req.auth.email }, (err, user) => {
+                if (err) throw err;
+                if (!user) return res.status(404).json({success: false, message: "User not found"});
+                if (user.passwordChanged - 30000 > (req.auth.iat * 1000)) {
+                    return res.status(401).json({ success: false, message: 'Authorization expired' });
+                }
+                req.auth.admin = user.admin;
+                return next();
+            });
         });
         return res.status(401).json({ success: false, message: 'Auth first.' });
     });
