@@ -35,14 +35,14 @@
     "material-ui": "^0.16.0",
     "mongoose": "^5.9.6",
     "mongoose-hidden": "^1.8.1",
-    "morgan": "^1.7.0",
+    "morgan": "^1.10.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
     "react-tap-event-plugin": "^2.0.0",
     "redux": "^3.6.0",
-    "socket.io": "^1.5.0"
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
