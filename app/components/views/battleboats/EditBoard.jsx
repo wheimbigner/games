@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -102,9 +103,9 @@ class EditBoard extends React.Component {
 	}
 }
 EditBoard.propTypes = {
-	game: React.PropTypes.string.isRequired,
-	team: React.PropTypes.number.isRequired,
-	close: React.PropTypes.func.isRequired
+	game: PropTypes.string.isRequired,
+	team: PropTypes.number.isRequired,
+	close: PropTypes.func.isRequired
 };
 
 export default EditBoard;

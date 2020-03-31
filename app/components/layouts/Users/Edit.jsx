@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import TextField from 'material-ui/TextField';
@@ -117,12 +118,12 @@ class EditUserForm extends React.Component {
 	}
 }
 EditUserForm.propTypes = {
-	params: React.PropTypes.object.isRequired,
-	location: React.PropTypes.object.isRequired,
-	admin: React.PropTypes.bool.isRequired
+	params: PropTypes.object.isRequired,
+	location: PropTypes.object.isRequired,
+	admin: PropTypes.bool.isRequired
 }
 EditUserForm.contextTypes = {
-	router: React.PropTypes.object.isRequired
+	router: PropTypes.object.isRequired
 }
 const mapStateToProps = function (store) {
     return {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 //import { connect } from 'react-redux';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -96,6 +97,6 @@ class EditPlayers extends React.Component {
     }
 }
 EditPlayers.propTypes = {
-    players: React.PropTypes.array.isRequired
+    players: PropTypes.array.isRequired
 };
 export default EditPlayers;

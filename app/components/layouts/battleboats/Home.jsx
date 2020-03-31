@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Paper from 'material-ui/Paper';
@@ -146,11 +147,11 @@ class Battleboats extends React.Component {
     }
 }
 Battleboats.propTypes = {
-    params: React.PropTypes.object.isRequired,
-    admin: React.PropTypes.bool.isRequired
+    params: PropTypes.object.isRequired,
+    admin: PropTypes.bool.isRequired
 }
 Battleboats.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 }
 
 export default connect(function(store){return {admin:store.api.admin}})(Battleboats);

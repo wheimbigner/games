@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
@@ -81,13 +82,13 @@ class Team extends React.Component {
 }
 
 Team.propTypes = {
-    ships: React.PropTypes.object.isRequired,
-    admin: React.PropTypes.bool,
-    game: React.PropTypes.string.isRequired,
-    team: React.PropTypes.number.isRequired,
-    board: React.PropTypes.array.isRequired,
-    players: React.PropTypes.array.isRequired,
-    name: React.PropTypes.string.isRequired,
+    ships: PropTypes.object.isRequired,
+    admin: PropTypes.bool,
+    game: PropTypes.string.isRequired,
+    team: PropTypes.number.isRequired,
+    board: PropTypes.array.isRequired,
+    players: PropTypes.array.isRequired,
+    name: PropTypes.string.isRequired,
 }
 
 export default Team;

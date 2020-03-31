@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import jwt_decode from 'jwt-decode';
@@ -43,11 +44,11 @@ class ResetPasswordForm extends React.Component {
 	}
 }
 ResetPasswordForm.propTypes = {
-	params: React.PropTypes.object.isRequired,
-	location: React.PropTypes.object.isRequired,
+	params: PropTypes.object.isRequired,
+	location: PropTypes.object.isRequired,
 }
 ResetPasswordForm.contextTypes = {
-	router: React.PropTypes.object.isRequired
+	router: PropTypes.object.isRequired
 }
 const mapStateToProps = function (store) {
     return {

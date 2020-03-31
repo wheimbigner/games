@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Checkbox from 'material-ui/Checkbox';
@@ -66,6 +67,6 @@ class UserListForm extends React.Component {
 }
 UserListForm.propTypes = { }
 UserListForm.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 }
 export default UserListForm;

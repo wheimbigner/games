@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -54,10 +55,10 @@ class Home extends React.Component {
 	}
 }
 Home.propTypes = {
-	children: React.PropTypes.element.isRequired
+	children: PropTypes.element.isRequired
 }
 Home.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 }
 const mapStateToProps = function (store) {
     return {
