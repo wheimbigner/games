@@ -51,7 +51,7 @@ class EditPlayers extends React.Component {
 			})
 		})
 	}
-    componentWillMount() {
+    componentDidMount() {
 		api.getUsers({ admin: false })
 			.then(response => {
 				this.setState({ users: this.mapUsersForAutocomplete(response.data.users) })
@@ -64,7 +64,7 @@ class EditPlayers extends React.Component {
                 <Paper style={{margin: 10, padding: 10}} zDepth={2}>
                     <AutoComplete floatingLabelText="Add player" hintText="type to search" dataSource={this.state.users}
                         filter={AutoComplete.fuzzyFilter} maxSearchResults={10} openOnFocus={false}
-                        fullWidth={true} onNewRequest={this.userSelected} searchText={this.state.user} />
+                        fullWidth={true} onNewRequest={this.userSelected} />
                     <RaisedButton label="Add player" primary={true} icon={<ContentAdd />} 
                         onClick={this.addPlayer} />
                 </Paper>

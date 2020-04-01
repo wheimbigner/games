@@ -16,10 +16,10 @@ class GameListForm extends React.Component {
 		this.newGame = this.newGame.bind(this);
 	}
 	newGame() {
-		boatApi.createGame().then(response => {	this.context.router.push('/games/' + response.data.id);	})
+		boatApi.createGame().then(response => {	this.props.history.push('/games/' + response.data.id);	})
 	}
 	onSelect(id) {
-		if (id.length) this.context.router.push('/games/' + this.state.games[id[0]]._id);
+		if (id.length) this.props.history.push('/games/' + this.state.games[id[0]]._id);
 	}
 	componentWillMount() {
 		boatApi.getGames()
@@ -63,9 +63,7 @@ class GameListForm extends React.Component {
 	}
 }
 GameListForm.propTypes = {
-}
-GameListForm.contextTypes = {
-    router: PropTypes.object.isRequired
+	history: PropTypes.object.isRequired
 }
 const mapStateToProps = function (store) {
     return {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Cookies from 'js-cookie';
@@ -14,6 +14,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import Ackbar from '../containers/Ackbar.jsx';
 import About from '../views/About.jsx';
+import AuthError from '../views/AuthError.jsx';
 import * as api from '../../api/api.js';
 
 class Home extends React.Component {
@@ -35,7 +36,7 @@ class Home extends React.Component {
 								<div style={{flex: true}}>{this.props.email}&nbsp;&nbsp;</div>
 							</div>
 						)}
-						onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)}
+						onLeftIconButtonClick={this.toggleDrawer.bind(this)}
 						iconElementRight={(<RaisedButton label='About / Feedback' onClick={() => {this.refs.about.open()}} />)}
 					/>
 					{this.props.children}
@@ -48,6 +49,7 @@ class Home extends React.Component {
 						<Link to="/"><MenuItem onClick={() => { api.logout(); this.closeDrawer(); } }>Log Out</MenuItem></Link>
 					</Drawer>
 					<About ref="about" />
+					<AuthError ref="autherror" />
 					<Ackbar />
 				</div>
 			</MuiThemeProvider>
@@ -55,10 +57,7 @@ class Home extends React.Component {
 	}
 }
 Home.propTypes = {
-	children: PropTypes.element.isRequired
-}
-Home.contextTypes = {
-    router: PropTypes.object.isRequired
+	children: PropTypes.array.isRequired
 }
 const mapStateToProps = function (store) {
     return {

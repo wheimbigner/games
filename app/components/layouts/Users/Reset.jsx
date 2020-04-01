@@ -12,6 +12,7 @@ import * as api from '../../../api/api.js';
 class ResetPasswordForm extends React.Component {
 	constructor(props) {
 		super(props);
+		const params = new URLSearchParams(this.props.location.search)
 		this.onChange = (event) => {
 			let newState = { message: '' };
 			newState[event.target.name] = event.target.value;
@@ -21,14 +22,15 @@ class ResetPasswordForm extends React.Component {
 			api.updateUser(this.state.email, {password: this.state.password}, this.state.token)
 			    .then(response => {
                     if (response.data.success) {
-						this.context.router.push('/');                        
-                    }
-				    this.setState({ message: response.data.message });
+						this.props.history.push('/');                        
+                    } else {
+						this.setState({ message: response.data.message });
+					}
 	    		})
 		}
 		this.state = {
-			email: jwt_decode(this.props.location.query['token']).email, password: '', message: '',
-            token: this.props.location.query['token']
+			email: jwt_decode(params.get('token')).email, password: '', message: '',
+            token: params.get('token')
 		};
 	}
 	render() {
@@ -46,9 +48,7 @@ class ResetPasswordForm extends React.Component {
 ResetPasswordForm.propTypes = {
 	params: PropTypes.object.isRequired,
 	location: PropTypes.object.isRequired,
-}
-ResetPasswordForm.contextTypes = {
-	router: PropTypes.object.isRequired
+	history: PropTypes.object.isRequired,
 }
 const mapStateToProps = function (store) {
     return {

@@ -41,17 +41,17 @@ class EditUserForm extends React.Component {
 			})
 		}
 		this.onClick_delete = () => {
-			api.deleteUser(this.props.params.user)
+			api.deleteUser(this.props.match.params.user)
 				.then(response => {
 					if (response.data.success) this.context.router.goBack();
 					else this.setState({ message: response.data.message, messageColor: 'red' });
 				})
 		}
 		this.state = {
-			email: (this.props.params.user === 'new') ? '' : this.props.params.user,
+			email: (this.props.match.params.user === 'new') ? '' : this.props.match.params.user,
 			firstName: '', lastName: '', supervisor: '', parttime: false, admin: false, password: '',
 			message: '', messageColor: 'green',
-			mode: (this.props.location.query['new']) ? 'create' : 'edit',
+			mode: (this.props.match.params.user === 'new') ? 'create' : 'edit',
 			sups: []
 		};
 	}
@@ -65,10 +65,10 @@ class EditUserForm extends React.Component {
 	}
 	componentWillMount() {
 		this.setState({
-			mode: (this.props.location.query['new']) ? 'create' : 'edit'
+			mode: (this.props.match.params.user === 'new') ? 'create' : 'edit'
 		})
 		if (this.state.mode === 'edit') {
-			api.getUser(this.props.params.user)
+			api.getUser(this.props.match.params.user)
 				.then(response => {
 					this.setState({
 						firstName: response.data.user.firstName,

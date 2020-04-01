@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // Layouts
 import Home from './components/layouts/Home.jsx';
@@ -12,15 +12,19 @@ import ResetPasswordForm  from './components/layouts/Users/Reset.jsx';
 import GameListForm  from './components/layouts/Games.jsx';
 import Battleboats   from './components/layouts/battleboats/Home.jsx';
 
-export default 	(
-    <Router history={hashHistory}>
-        <Route path="/" component={Home}>
-            <IndexRoute component={SigninForm} />
-            <Route path="/users" component={UserListForm} />
-            <Route path="/users/:user" component={EditUserForm} />
-            <Route path="/reset" component={ResetPasswordForm} />
-            <Route path="/games" component={GameListForm} />
-            <Route path="/games/:game" component={Battleboats} />
-        </Route>
-    </Router>
-);
+export default class extends React.Component {
+    render () {
+        return (
+            <Router>
+                <Home>
+                    <Route path="/" exact component={SigninForm} />
+                    <Route path="/users" exact component={UserListForm} />
+                    <Route path="/users/:user" component={EditUserForm} />
+                    <Route path="/reset" component={ResetPasswordForm} />
+                    <Route path="/games" exact component={GameListForm} />
+                    <Route path="/games/:game" component={Battleboats} />
+                </Home>
+            </Router>
+        );
+    }
+};

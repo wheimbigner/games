@@ -16,7 +16,7 @@ class SigninForm extends React.Component {
 		this.onChange_email = event => { this.setState({ email: event.target.value, message: '' }) };
 		this.onChange_password = event => { this.setState({ password: event.target.value, message: '' }) };
 		this.onClick_signup = () => {
-			this.context.router.push({
+			this.props.history.push({
 				pathname: '/users/' + (this.state.email ? this.state.email : 'new'),
 				query: { new: true }
 			});
@@ -26,7 +26,7 @@ class SigninForm extends React.Component {
 				.then(response => {
 					if (response.data.success) {
 						Cookies.set('token', response.data.token, { expires: 7 });
-						this.context.router.push('/games');
+						this.props.history.push('/games');
 					} else {
 						this.setState({ message: response.data.message });
 					}

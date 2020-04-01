@@ -13,7 +13,7 @@ class UserListForm extends React.Component {
             users: [],
         };
         this.onSelect = id => {
-            if (id.length) this.context.router.push('/users/' + this.state.users[id[0]]._id);
+            if (id.length) this.props.history.push('/users/' + this.state.users[id[0]]._id);
         };
         this.onCheck = (event,checked) => {
             api.getUsers({admin: checked})

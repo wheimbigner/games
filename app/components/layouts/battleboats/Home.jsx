@@ -53,7 +53,7 @@ class Battleboats extends React.Component {
         this.deleteGame = this.deleteGame.bind(this);
     }
     componentWillMount() {
-        this.socket = io('/battleship/' + this.props.params.game);
+        this.socket = io('/battleship/' + this.props.match.params.game);
         this.socket.on('update', data => {
             this.setState({game: data});
             api.title(this.state.game.name);
@@ -75,16 +75,16 @@ class Battleboats extends React.Component {
         });
     }
     saveGamename() {
-        boatApi.setGameName(this.props.params.game, this.state.game.name)
+        boatApi.setGameName(this.props.match.params.game, this.state.game.name)
             .then( () => { this.setState({cansavename: false}) } )
     }
     saveDesc() {
-        boatApi.setGameDesc(this.props.params.game, this.state.game.desc)
+        boatApi.setGameDesc(this.props.match.params.game, this.state.game.desc)
             .then( () => { this.setState({cansavedesc: false}) } )
     }
     deleteGame() {
-        boatApi.deleteGame(this.props.params.game)
-            .then( () => { this.context.router.push('/games') } );
+        boatApi.deleteGame(this.props.match.params.game)
+            .then( () => { this.props.history.push('/games') } );
     }
     render() {
         return (
@@ -136,10 +136,10 @@ class Battleboats extends React.Component {
                 }
                 <table><tbody><tr>
                     <td style={{ width: '50%', verticalAlign: 'top' }}>
-                        <Team team={1} game={this.props.params.game} admin={this.props.admin} {...this.state.game.team1} />
+                        <Team team={1} game={this.props.match.params.game} admin={this.props.admin} {...this.state.game.team1} />
                     </td>
                     <td style={{ width: '50%', verticalAlign: 'top' }}>
-                        <Team team={2} game={this.props.params.game} admin={this.props.admin} {...this.state.game.team2} />
+                        <Team team={2} game={this.props.match.params.game} admin={this.props.admin} {...this.state.game.team2} />
                     </td>
                 </tr></tbody></table>
             </Paper>
@@ -148,10 +148,9 @@ class Battleboats extends React.Component {
 }
 Battleboats.propTypes = {
     params: PropTypes.object.isRequired,
-    admin: PropTypes.bool.isRequired
-}
-Battleboats.contextTypes = {
-    router: PropTypes.object.isRequired
+    admin: PropTypes.bool.isRequired,
+    match: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
 }
 
 export default connect(function(store){return {admin:store.api.admin}})(Battleboats);

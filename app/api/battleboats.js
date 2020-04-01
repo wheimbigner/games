@@ -1,6 +1,21 @@
 import axios from 'axios';
 import store from '../store.js';
-
+/*
+const instance = axios.create({
+    baseURL: store.getState().api.baseURL
+})
+axios.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    store.api.message("API INTERCEPTOR SUCCESS:" + response.message);
+    return response;
+  }, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    store.api.message("API INTERCEPTOR ERROR");
+    return error;
+  });
+*/
 export function createGame() {
     const api = store.getState().api;
     const config = { headers: {'x-access-token': api.token}};

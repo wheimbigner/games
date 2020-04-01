@@ -125,7 +125,7 @@ router.post('/users/:user/reset', (req, res) => {
 			subject: "Password Reset for heisenberg.games",
 			text: "You asked for a password reset.\n" +
 			"Your password reset url is:\n" +
-			config.get('url') + '#/reset?token=' + token + "\n" +
+			config.get('url') + 'reset?token=' + token + "\n" +
 			"This link is only good for 1 hour after being requested."
 		}, (err, body) => {
 			if (err) throw err;
