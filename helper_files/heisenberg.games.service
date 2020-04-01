@@ -1,0 +1,20 @@
+#Move this to /lib/systemd/system
+#Then run systemctl daemon-reload
+#then you can service heisenberg.games start/restart/stop/etc.
+
+[Unit]
+Description=helper service to run nodejs game api
+Documentation=https://heisenberg.games
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+WorkingDirectory=/usr/games/heisenberg.games
+MemoryMax=1500M
+Type=simple
+User=games
+ExecStart=/usr/bin/node /usr/games/heisenberg.games/api/server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
