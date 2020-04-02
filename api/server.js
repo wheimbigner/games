@@ -69,7 +69,7 @@ router.get('/oauthredirect', (req, res) => {
 			"redirect_uri": config.get('url') + 'callback',
 			"response_type": "id_token",
 			"scope": "openid profile email",
-			"prompt": "consent",
+//			"prompt": "consent",
 			"nonce": nonce(32)
 		}
 	}));
