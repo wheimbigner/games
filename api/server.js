@@ -2,8 +2,22 @@ var config = require('config');
 var User = require('./models/users');
 
 var jwt = require('jsonwebtoken');
+var jwksClient = require('jwks-rsa');
+var nonce = require('nonce-str');
+
+var googleKeyClient = jwksClient({
+	jwksUri: 'https://www.googleapis.com/oauth2/v3/certs'
+});
+
+function getKey(header, callback) {
+	googleKeyClient.getSigningKey(header.kid, function(err, key) {
+		var signingKey = key.publicKey || key.rsaPublicKey;
+		callback(null, signingKey);
+	});
+}
 
 var mg = require('mailgun-js')({apiKey: config.get('mailgun.apikey'), domain: config.get('mailgun.domain')});;
+const url = require('url');
 
 var express = require('express');
 var app = express();
@@ -47,10 +61,64 @@ router.use(function (req, res, next) {
 	return next();
 });
 
+router.get('/oauthredirect', (req, res) => {
+	res.redirect(url.format({
+		pathname: 'https://accounts.google.com/o/oauth2/v2/auth',
+		query: {
+			"client_id": config.get('client_id'),
+			"redirect_uri": config.get('url') + 'callback',
+			"response_type": "id_token",
+			"scope": "openid profile email",
+			"prompt": "consent",
+			"nonce": nonce(32)
+		}
+	}));
+})
 // TODO: this should update last login
 // TODO: If we save it, it'll weird out updatedOn. Maybe find a fix.
 router.post('/authenticate', (req, res) => {
-	User.findOne({ _id: req.body.email }, (err, user) => {
+	if ( req.body.oauth ) { // FIXME options should verify nonce probably
+		const opts = {
+			audience: config.get('client_id')
+		}
+		jwt.verify(req.body.oauth, getKey, {}, function(err, decoded) {
+			if (err) throw err;
+			if (!decoded.email || !decoded.given_name || !decoded.family_name ) {
+				return res.json({ success: false, message: "Weird token" });
+			}
+			const email = decoded.email.toLowerCase();
+			User.findOne({ _id: email }, (err, user) => {
+				if (!user) {
+					user = new User({
+						_id: email,
+						firstName: decoded.given_name,
+						lastName: decoded.family_name,
+						supervisor: '',
+						password: '', // need random string here probably
+						parttime: false,
+						admin: false,
+						picture: decoded.picture || ''
+					});
+				} else {
+					user.firstName = decoded.given_name;
+					user.lastName = decoded.family_name;
+					user.picture = decoded.picture || user.picture;
+				}
+				user.save(err2 => {
+					if (err2) throw err2;
+					return res.json({
+						success: true, message: "Auth is good!",
+						token: jwt.sign(
+							{ email: email },
+							config.get('jwtSecret'),
+							{ algorithm: 'HS512', expiresIn: '30d' }
+						),
+						admin: user.admin
+					});
+				});
+			});
+		});
+	} else User.findOne({ _id: req.body.email }, (err, user) => {
 		if (err) throw err;
 		if (!user)
 			return res.status(404).json({ success: false, message: "User not found" });
@@ -63,7 +131,7 @@ router.post('/authenticate', (req, res) => {
 					{ algorithm: 'HS512', expiresIn: '30d' }),
 					admin: user.admin
 				});
-			res.status(403).json({ success: false, message: "Password's not good" });
+			return res.status(403).json({ success: false, message: "Password's not good" });
 		});
 	});
 });

@@ -17,5 +17,6 @@
 		"supervisor": "",
 		"admin": true		
 	},
-	"url": "http://example.com/"
+	"url": "http://example.com/",
+	"client_id": "use this for google OIDC setup"
 }

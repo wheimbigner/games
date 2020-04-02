@@ -18,6 +18,7 @@ var UserSchema = new Schema(
 		admin: { type: Boolean, default: false },
 		lastlogin: Date,
 		lastReset: { type: Date, default: 0 },
+		picture: { type: String, default: '' }
 	},
 	{
 		timestamps: true
@@ -37,7 +38,9 @@ UserSchema.pre('save', function (next) {
 	})
 })
 UserSchema.methods.checkpass = function (pass, cb) {
-	bcrypt.compare(pass, this.password, function (err, isMatch) {
+	if (!pass || pass == '')
+		cb(null, false)
+	else bcrypt.compare(pass, this.password, function (err, isMatch) {
 		if (err) return cb(err);
 		cb(null, isMatch);
 	});

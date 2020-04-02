@@ -24,6 +24,15 @@ export function auth(email, password) {
         });
 }
 
+export function oauth(token) {
+    const api = store.getState().api;
+    return axios.post(api.baseurl + '/authenticate', {oauth: token})
+        .then(response => {
+            store.dispatch(authSuccess(response.data.token, response.data.admin));
+            return response;
+        });
+}
+
 export function reset(email) {
     const api = store.getState().api;
     return axios.post(api.baseurl + '/users/' + email + '/reset', {});
