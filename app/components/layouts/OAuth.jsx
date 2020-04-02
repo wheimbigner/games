@@ -29,10 +29,7 @@ export class OAuthCallback extends React.Component {
         this.state = { message: 'Authorizing...' };
     }
     componentDidMount() {
-        console.log(this.props);
-        console.log(this.props.location.hash.substring(1));
         const params = new URLSearchParams(this.props.location.hash.substring(1));
-        console.log(params.get('id_token'));
         api.oauth(params.get('id_token'))
             .then(response => {
                 if (response.data.success) {
