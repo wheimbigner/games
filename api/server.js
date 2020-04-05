@@ -74,6 +74,19 @@ router.get('/oauthredirect', (req, res) => {
 		}
 	}));
 })
+router.get('/forceoauthredirect', (req, res) => {
+	res.redirect(url.format({
+		pathname: 'https://accounts.google.com/o/oauth2/v2/auth',
+		query: {
+			"client_id": config.get('client_id'),
+			"redirect_uri": config.get('url') + 'callback',
+			"response_type": "id_token",
+			"scope": "openid profile email",
+			"prompt": "consent",
+			"nonce": nonce(32)
+		}
+	}));
+})
 // TODO: this should update last login
 // TODO: If we save it, it'll weird out updatedOn. Maybe find a fix.
 router.post('/authenticate', (req, res) => {
